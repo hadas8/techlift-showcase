@@ -1,0 +1,28 @@
+{
+  "slug": "he",
+  "lang": "he",
+  "title": "אפליקציות מהסדנה",
+  "cohort": "מחזור אביב 2026",
+  "intro": "כל אפליקציה כאן נבנתה מאפס על ידי תלמיד או תלמידה בסדנה, בעזרת כלי בינה מלאכותית. אפשר ללחוץ על כל אחת מהן ולהתנסות בה כאן באתר.",
+  "note": "האפליקציות הן פרויקטים לימודיים. הנתונים בהן הם נתוני הדגמה ואינם מייצגים מידע אמיתי.",
+  "apps": [
+    {
+      "name": "טוב שנשאר",
+      "description": "חיבור בין אוכל איכותי שנשאר מאירועים לבין אנשים ומשפחות שזקוקים לו, לפני שהוא נזרק.",
+      "author": "הדס",
+      "url": "https://service-2383.ai.studio/",
+      "repo": "https://github.com/hadas8/food_left_googleAIStudio_app",
+      "tags": ["עוזר חכם", "קיימות"],
+      "screenshot": "tov-shenishar.png"
+    },
+    {
+      "name": "EcoSort: אתגר המיחזור",
+      "description": "משחק חינוכי אינטראקטיבי ומתוזמן שבו ממיינים פסולת לפחי המיחזור הנכונים, בסצנות משתנות.",
+      "author": "הדס",
+      "url": "https://hadas8.github.io/EcoSort-Webapp/",
+      "repo": "https://github.com/hadas8/EcoSort-Webapp",
+      "tags": ["משחק", "חינוך"],
+      "screenshot": "ecosort.png"
+    }
+  ]
+}

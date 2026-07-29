@@ -1,0 +1,10 @@
+{
+  "name": "techlift-showcase",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node --run build && npx --yes serve dist"
+  }
+}

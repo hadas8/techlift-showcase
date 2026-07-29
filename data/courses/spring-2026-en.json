@@ -1,0 +1,28 @@
+{
+  "slug": "en",
+  "lang": "en",
+  "title": "Apps From the Workshop",
+  "cohort": "Spring 2026 cohort",
+  "intro": "Every app here was built from scratch by a student on the workshop, using AI tools. Click any of them to try it right here on the page.",
+  "note": "These are student learning projects. The data inside them is sample data and does not represent real information.",
+  "apps": [
+    {
+      "name": "Tov SheNishar",
+      "description": "Connects good food left over from events with people and families who need it, before it gets thrown away.",
+      "author": "Hadas",
+      "url": "https://service-2383.ai.studio/",
+      "repo": "https://github.com/hadas8/food_left_googleAIStudio_app",
+      "tags": ["Smart assistant", "Sustainability"],
+      "screenshot": "tov-shenishar.png"
+    },
+    {
+      "name": "EcoSort: Recycling Challenge",
+      "description": "An interactive, timed educational game where players sort trash into the correct recycling bins across changing scenes.",
+      "author": "Hadas",
+      "url": "https://hadas8.github.io/EcoSort-Webapp/",
+      "repo": "https://github.com/hadas8/EcoSort-Webapp",
+      "tags": ["Game", "Education"],
+      "screenshot": "ecosort.png"
+    }
+  ]
+}
