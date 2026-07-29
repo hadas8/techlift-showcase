@@ -8,6 +8,7 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z
 const COURSES = path.join(ROOT, 'data', 'courses');
 const SRC = path.join(ROOT, 'src');
 const SHOTS = path.join(ROOT, 'public', 'screenshots');
+const BRAND = path.join(ROOT, 'public', 'brand');
 const DIST = path.join(ROOT, 'dist');
 
 const STRINGS = {
@@ -80,6 +81,21 @@ function card(app, t, hasShot) {
 }
 
 function page(course, t, cards) {
+  const hero = course.hero
+    ? `<img class="hero-art" src="../brand/${esc(course.hero)}" alt="" width="494" height="381">`
+    : '';
+
+  const partners = (course.partners || []).length
+    ? `<section class="partners">
+  <div class="wrap partners-inner">
+    ${course.partnersLabel ? `<p>${esc(course.partnersLabel)}</p>` : ''}
+    ${course.partners
+      .map((p) => `<img src="../brand/${esc(p.file)}" alt="${esc(p.name)}" loading="lazy">`)
+      .join('\n    ')}
+  </div>
+</section>`
+    : '';
+
   return `<!doctype html>
 <html lang="${esc(course.lang)}" dir="${t.dir}">
 <head>
@@ -92,13 +108,16 @@ function page(course, t, cards) {
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
-<body>
+<body${course.theme ? ` class="theme-${esc(course.theme)}"` : ''}>
 <header class="masthead">
-  <div class="wrap">
-    ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
-    <h1>${esc(course.title)}</h1>
-    <p class="intro">${esc(course.intro)}</p>
-    <p class="count">${esc(t.counter(course.apps.length))}</p>
+  <div class="wrap hero">
+    <div>
+      ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
+      <h1>${esc(course.title)}</h1>
+      <p class="intro">${esc(course.intro)}</p>
+      <p class="count">${esc(t.counter(course.apps.length))}</p>
+    </div>
+    ${hero}
   </div>
 </header>
 
@@ -113,6 +132,8 @@ ${cards}
     ${course.note ? `<p>${esc(course.note)}</p>` : ''}
   </div>
 </footer>
+
+${partners}
 
 <div class="modal" id="viewer" hidden>
   <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
@@ -135,16 +156,24 @@ ${cards}
 }
 
 async function main() {
-  await rm(DIST, { recursive: true, force: true });
+  // Empty dist rather than removing it: on Windows a running preview server
+  // (or OneDrive) holds a handle on the directory itself, and rmdir fails.
+  if (existsSync(DIST)) {
+    for (const entry of await readdir(DIST)) {
+      await rm(path.join(DIST, entry), { recursive: true, force: true });
+    }
+  }
   await mkdir(path.join(DIST, 'assets'), { recursive: true });
   await mkdir(path.join(DIST, 'screenshots'), { recursive: true });
+  await mkdir(path.join(DIST, 'brand'), { recursive: true });
 
   await copyFile(path.join(SRC, 'styles.css'), path.join(DIST, 'assets', 'styles.css'));
   await copyFile(path.join(SRC, 'app.js'), path.join(DIST, 'assets', 'app.js'));
 
-  if (existsSync(SHOTS)) {
-    for (const f of await readdir(SHOTS)) {
-      await copyFile(path.join(SHOTS, f), path.join(DIST, 'screenshots', f));
+  for (const [from, to] of [[SHOTS, 'screenshots'], [BRAND, 'brand']]) {
+    if (!existsSync(from)) continue;
+    for (const f of await readdir(from)) {
+      await copyFile(path.join(from, f), path.join(DIST, to, f));
     }
   }
 

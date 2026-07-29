@@ -6,7 +6,11 @@
   --card: #ffffff;
   --line: #e6e3dc;
   --accent: #1f6f5c;
+  --accent-ink: #ffffff;
   --accent-soft: #eaf3f0;
+  --halo: var(--accent-soft);
+  --band: #14261f;
+  --band-ink: #ffffff;
   --shadow-sm: 0 1px 2px rgba(20, 38, 31, .06), 0 2px 8px rgba(20, 38, 31, .04);
   --shadow-lg: 0 12px 32px rgba(20, 38, 31, .14), 0 2px 8px rgba(20, 38, 31, .08);
   --radius: 14px;
@@ -35,9 +39,18 @@ body {
   padding: 72px 0 48px;
   border-bottom: 1px solid var(--line);
   background:
-    radial-gradient(900px 320px at 50% -120px, var(--accent-soft), transparent 70%),
+    radial-gradient(900px 320px at 50% -120px, var(--halo), transparent 70%),
     var(--paper);
 }
+
+/* Hero splits into text + illustration once there's room for both. */
+.hero { display: grid; gap: 32px; align-items: center; }
+
+@media (min-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 48px; }
+}
+
+.hero-art { justify-self: center; width: 100%; max-width: 340px; height: auto; }
 
 .eyebrow {
   display: inline-block;
@@ -156,8 +169,8 @@ h1 {
   gap: 7px;
 }
 
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: #185848; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { filter: brightness(.93); }
 
 .btn-ghost { background: transparent; color: var(--ink-soft); border-color: var(--line); }
 .btn-ghost:hover { border-color: var(--ink-faint); color: var(--ink); }
@@ -178,6 +191,41 @@ h1 {
 }
 
 .foot p { margin: 0 0 8px; max-width: 70ch; }
+
+/* Dark band. The supplied logos are white knockouts, so they need a dark
+   backing to be visible at all. */
+.partners {
+  margin-top: 56px;
+  background: var(--band);
+  color: var(--band-ink);
+  padding: 40px 0;
+}
+
+.partners-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px 56px;
+}
+
+.partners p {
+  width: 100%;
+  margin: 0 0 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .62;
+}
+
+.partners img {
+  height: 52px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+}
 
 /* ---------- modal ---------- */
 
@@ -245,6 +293,40 @@ body.modal-open { overflow: hidden; }
   .modal { padding: 0; }
   .modal-panel { height: 100%; width: 100%; border-radius: 0; }
 }
+
+/* ---------- brand theme ---------- */
+/* Palette lifted from the course deck: yellow #FFDF58, periwinkle #8EA5D9,
+   pale blue #D0E0EE, deep indigo text. Yellow is a background colour only —
+   it has nowhere near enough contrast to be used as text. */
+
+.theme-brand {
+  --ink: #1e1b4b;
+  --ink-soft: #474372;
+  --ink-faint: #7c7aa0;
+  --paper: #fdfcf8;
+  --card: #ffffff;
+  --line: #e4e2ee;
+  --accent: #ffdf58;
+  --accent-ink: #1e1b4b;
+  --accent-soft: #d0e0ee;
+  --halo: #dfe9f5;
+  --band: #1e1b4b;
+  --band-ink: #ffffff;
+}
+
+.theme-brand .eyebrow { color: var(--ink); background: var(--accent); }
+
+.theme-brand .tags li { color: #2c3566; background: var(--accent-soft); }
+
+.theme-brand .btn-ghost:hover { border-color: #8ea5d9; color: var(--ink); }
+
+.theme-brand .card:hover,
+.theme-brand .card:focus-within { border-color: #c3d2e6; }
+
+.theme-brand .shot { background: var(--halo); }
+
+.theme-brand .btn:focus-visible,
+.theme-brand .card a:focus-visible { outline-color: #8ea5d9; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
