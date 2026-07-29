@@ -38,26 +38,35 @@ const esc = (s = '') =>
   String(s).replace(/[&<>"']/g, (c) =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+// **phrase** in a course title gets a highlighter swash behind it. Escaped
+// first, so the markers are the only markup that survives.
+const headline = (s = '') =>
+  esc(s).replace(/\*\*(.+?)\*\*/g, '<span class="mark">$1</span>');
+
+const plain = (s = '') => String(s).replace(/\*\*/g, '');
+
 // Deterministic tile for apps that have no screenshot yet, so a missing image
-// looks intentional rather than broken. Hue varies per app; lightness follows
-// the theme, since a pastel tile on a dark page reads as a broken image.
+// looks intentional rather than broken. The brand theme keeps hues inside the
+// blue-to-indigo range so a half-filled grid still looks like one family;
+// the default theme spreads across the wheel.
 function placeholder(name, theme) {
   let h = 0;
   for (const ch of name) h = (h * 31 + ch.codePointAt(0)) % 360;
   const initial = esc([...name.trim()][0] || '?');
-  const dark = theme === 'brand';
-  const from = dark ? `hsl(${248} 44% 19%)` : `hsl(${h} 42% 88%)`;
-  const to = dark ? `hsl(${(h % 60) + 230} 38% 27%)` : `hsl(${(h + 40) % 360} 38% 78%)`;
-  const ink = dark ? `hsl(${(h % 60) + 230} 40% 72%)` : `hsl(${h} 30% 32%)`;
+  const brand = theme === 'brand';
+  const hue = brand ? 212 + (h % 44) : h;
+  const from = brand ? `hsl(${hue} 46% 93%)` : `hsl(${h} 42% 88%)`;
+  const to = brand ? `hsl(${hue + 14} 40% 83%)` : `hsl(${(h + 40) % 360} 38% 78%)`;
+  const ink = brand ? `hsl(${hue + 6} 34% 38%)` : `hsl(${h} 30% 32%)`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-hidden="true">
   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
     <stop offset="0" stop-color="${from}"/>
     <stop offset="1" stop-color="${to}"/>
   </linearGradient></defs>
   <rect width="480" height="300" fill="url(#g)"/>
-  <text x="240" y="172" text-anchor="middle" font-size="104" font-weight="600"
-        fill="${ink}" opacity="${dark ? '.5' : '.55'}"
-        font-family="system-ui, sans-serif">${initial}</text>
+  <text x="240" y="172" text-anchor="middle" font-size="104"
+        font-weight="${brand ? '500' : '600'}" fill="${ink}" opacity=".5"
+        font-family="${brand ? '\'Frank Ruhl Libre\', Georgia, serif' : 'system-ui, sans-serif'}">${initial}</text>
 </svg>`;
 }
 
@@ -106,7 +115,7 @@ function page(course, t, cards) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(course.title)}${course.cohort ? ' — ' + esc(course.cohort) : ''}</title>
+<title>${esc(plain(course.title))}${course.cohort ? ' — ' + esc(course.cohort) : ''}</title>
 <meta name="description" content="${esc(course.intro).slice(0, 160)}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,7 +127,7 @@ function page(course, t, cards) {
   <div class="wrap hero">
     <div>
       ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
-      <h1>${esc(course.title)}</h1>
+      <h1>${headline(course.title)}</h1>
       <p class="intro">${esc(course.intro)}</p>
       <p class="count">${esc(t.counter(course.apps.length))}</p>
     </div>
