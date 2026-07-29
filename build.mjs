@@ -39,27 +39,32 @@ const esc = (s = '') =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // Deterministic tile for apps that have no screenshot yet, so a missing image
-// looks intentional rather than broken.
-function placeholder(name) {
+// looks intentional rather than broken. Hue varies per app; lightness follows
+// the theme, since a pastel tile on a dark page reads as a broken image.
+function placeholder(name, theme) {
   let h = 0;
   for (const ch of name) h = (h * 31 + ch.codePointAt(0)) % 360;
   const initial = esc([...name.trim()][0] || '?');
+  const dark = theme === 'brand';
+  const from = dark ? `hsl(${248} 44% 19%)` : `hsl(${h} 42% 88%)`;
+  const to = dark ? `hsl(${(h % 60) + 230} 38% 27%)` : `hsl(${(h + 40) % 360} 38% 78%)`;
+  const ink = dark ? `hsl(${(h % 60) + 230} 40% 72%)` : `hsl(${h} 30% 32%)`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-hidden="true">
   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="hsl(${h} 42% 88%)"/>
-    <stop offset="1" stop-color="hsl(${(h + 40) % 360} 38% 78%)"/>
+    <stop offset="0" stop-color="${from}"/>
+    <stop offset="1" stop-color="${to}"/>
   </linearGradient></defs>
   <rect width="480" height="300" fill="url(#g)"/>
-  <text x="240" y="172" text-anchor="middle" font-size="108" font-weight="700"
-        fill="hsl(${h} 30% 32%)" opacity=".55"
+  <text x="240" y="172" text-anchor="middle" font-size="104" font-weight="600"
+        fill="${ink}" opacity="${dark ? '.5' : '.55'}"
         font-family="system-ui, sans-serif">${initial}</text>
 </svg>`;
 }
 
-function card(app, t, hasShot) {
+function card(app, t, hasShot, theme) {
   const media = hasShot
     ? `<img class="shot" src="../screenshots/${esc(app.screenshot)}" alt="" loading="lazy" width="480" height="300">`
-    : `<div class="shot">${placeholder(app.name)}</div>`;
+    : `<div class="shot">${placeholder(app.name, theme)}</div>`;
 
   const tags = (app.tags || [])
     .map((tag) => `<li>${esc(tag)}</li>`)
@@ -105,7 +110,7 @@ function page(course, t, cards) {
 <meta name="description" content="${esc(course.intro).slice(0, 160)}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body${course.theme ? ` class="theme-${esc(course.theme)}"` : ''}>
@@ -191,7 +196,7 @@ async function main() {
         if (app.screenshot && !hasShot) {
           console.warn(`  ! no screenshot yet for "${app.name}" (${app.screenshot}) — using a placeholder`);
         }
-        return card(app, t, hasShot);
+        return card(app, t, hasShot, course.theme);
       })
       .join('\n');
 

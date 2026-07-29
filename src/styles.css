@@ -295,38 +295,92 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ---------- brand theme ---------- */
-/* Palette lifted from the course deck: yellow #FFDF58, periwinkle #8EA5D9,
-   pale blue #D0E0EE, deep indigo text. Yellow is a background colour only —
-   it has nowhere near enough contrast to be used as text. */
+/* Derived from the course deck, not copied from it. The deck is classroom
+   material: bright, illustrated, white. This page is for parents and donors,
+   so the same indigo and yellow run at a lower volume — deep ground, accent
+   used sparingly, serif display face, considerably more air. */
 
 .theme-brand {
-  --ink: #1e1b4b;
-  --ink-soft: #474372;
-  --ink-faint: #7c7aa0;
-  --paper: #fdfcf8;
-  --card: #ffffff;
-  --line: #e4e2ee;
+  --ink: #f3f0e6;
+  --ink-soft: #b6b1cd;
+  --ink-faint: #8985a6;
+  --paper: #14113a;
+  --card: #1c1849;
+  --line: #302b63;
   --accent: #ffdf58;
-  --accent-ink: #1e1b4b;
-  --accent-soft: #d0e0ee;
-  --halo: #dfe9f5;
-  --band: #1e1b4b;
-  --band-ink: #ffffff;
+  --accent-ink: #14113a;
+  --accent-soft: rgba(255, 223, 88, .13);
+  --halo: rgba(142, 165, 217, .16);
+  --band: transparent;
+  --band-ink: #f3f0e6;
+  --shadow-sm: none;
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, .38);
 }
 
-.theme-brand .eyebrow { color: var(--ink); background: var(--accent); }
+.theme-brand h1 {
+  font-family: "Frank Ruhl Libre", Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(38px, 6vw, 62px);
+  line-height: 1.08;
+  letter-spacing: -.015em;
+}
 
-.theme-brand .tags li { color: #2c3566; background: var(--accent-soft); }
+.theme-brand .masthead { padding: 104px 0 0; border-bottom: 0; }
 
-.theme-brand .btn-ghost:hover { border-color: #8ea5d9; color: var(--ink); }
+/* A hairline that fades at both ends, instead of a full-width border. */
+.theme-brand .masthead::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 76px;
+  background: linear-gradient(to left, transparent, var(--line) 12%, var(--line) 88%, transparent);
+}
+
+.theme-brand .eyebrow {
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  font-size: 12.5px;
+  letter-spacing: .18em;
+  margin-bottom: 24px;
+}
+
+.theme-brand .intro { font-size: clamp(17px, 2vw, 19.5px); max-width: 56ch; }
+
+.theme-brand .grid { padding-top: 56px; gap: 32px; }
+
+.theme-brand .card { border-radius: 10px; }
 
 .theme-brand .card:hover,
-.theme-brand .card:focus-within { border-color: #c3d2e6; }
+.theme-brand .card:focus-within {
+  border-color: #46407f;
+  transform: translateY(-4px);
+}
 
-.theme-brand .shot { background: var(--halo); }
+.theme-brand .shot { background: var(--halo); border-bottom-color: var(--line); }
+
+.theme-brand .card h2 { font-size: 20px; font-weight: 600; letter-spacing: 0; }
+
+.theme-brand .tags li { color: #f0d670; background: var(--accent-soft); font-weight: 500; }
+
+.theme-brand .btn { border-radius: 8px; }
+
+.theme-brand .btn-ghost { color: var(--ink-soft); border-color: var(--line); }
+.theme-brand .btn-ghost:hover { border-color: #56508f; color: var(--ink); }
+
+.theme-brand .foot { border-top-color: var(--line); }
+
+/* The logos are white knockouts, so on this ground they need no band. */
+.theme-brand .partners { padding: 4px 0 76px; margin-top: 0; }
+.theme-brand .partners img { height: 46px; opacity: .92; }
+
+.theme-brand .modal { background: rgba(8, 6, 26, .74); }
+.theme-brand .modal-bar { background: var(--card); border-bottom-color: var(--line); }
+.theme-brand .icon-btn { border-color: var(--line); color: var(--ink-soft); }
+.theme-brand .icon-btn:hover { border-color: #56508f; color: var(--ink); }
 
 .theme-brand .btn:focus-visible,
-.theme-brand .card a:focus-visible { outline-color: #8ea5d9; }
+.theme-brand .card a:focus-visible { outline-color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
