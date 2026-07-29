@@ -6,6 +6,8 @@
   "cohort": "מחזור אביב 2026",
   "intro": "כל אפליקציה כאן נבנתה מאפס על ידי תלמיד או תלמידה בקורס, בעזרת כלי בינה מלאכותית. אפשר ללחוץ על כל אחת מהן ולהתנסות בה כאן באתר.",
   "note": "האפליקציות הן פרויקטים לימודיים. הנתונים בהן הם נתוני הדגמה ואינם מייצגים מידע אמיתי.",
+  "appsHeading": "הפרויקטים",
+  "appsLead": "כל פרויקט נבנה מהרעיון ועד למוצר עובד שאפשר להשתמש בו כאן ועכשיו.",
   "partnersLabel": "בשיתוף",
   "partners": [
     { "file": "logo-b.png", "name": "לוגו שותף" },
@@ -20,6 +22,7 @@
       "url": "https://service-2383.ai.studio/",
       "repo": "https://github.com/hadas8/food_left_googleAIStudio_app",
       "tags": ["עוזר חכם", "קיימות"],
+      "icon": "🍲",
       "screenshot": "tov-shenishar.png"
     },
     {
@@ -29,6 +32,7 @@
       "url": "https://hadas8.github.io/EcoSort-Webapp/",
       "repo": "https://github.com/hadas8/EcoSort-Webapp",
       "tags": ["משחק", "חינוך"],
+      "icon": "♻️",
       "screenshot": "ecosort.png"
     }
   ]

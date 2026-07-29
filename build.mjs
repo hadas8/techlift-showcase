@@ -70,20 +70,36 @@ function placeholder(name, theme) {
 </svg>`;
 }
 
+// Tile colour is derived from the app name so every app gets a distinct but
+// on-palette square without anyone having to choose one.
+function tileStyle(name, theme) {
+  let h = 0;
+  for (const ch of name) h = (h * 31 + ch.codePointAt(0)) % 360;
+  if (theme === 'brand') {
+    const hue = 214 + (h % 46);
+    return `--tile:linear-gradient(140deg,hsl(${hue} 62% 92%),hsl(${hue + 12} 54% 84%))`;
+  }
+  return `--tile:linear-gradient(140deg,hsl(${h} 46% 92%),hsl(${(h + 30) % 360} 42% 85%))`;
+}
+
 function card(app, t, hasShot, theme) {
   const media = hasShot
     ? `<img class="shot" src="../screenshots/${esc(app.screenshot)}" alt="" loading="lazy" width="480" height="300">`
-    : `<div class="shot">${placeholder(app.name, theme)}</div>`;
+    : '';
 
-  const tags = (app.tags || [])
-    .map((tag) => `<li>${esc(tag)}</li>`)
-    .join('');
+  const tags = (app.tags || []).map((tag) => `<li>${esc(tag)}</li>`).join('');
+  const initial = [...String(app.name).trim()][0] || '?';
 
   return `<li class="card" data-url="${esc(app.url)}" data-name="${esc(app.name)}" data-embed="${app.embeddable === false ? 'false' : 'true'}">
       ${media}
       <div class="card-body">
-        <h2>${esc(app.name)}</h2>
-        ${app.author ? `<p class="byline">${esc(t.by)} ${esc(app.author)}</p>` : ''}
+        <div class="card-head">
+          <span class="tile" style="${esc(tileStyle(app.name, theme))}" aria-hidden="true">${esc(app.icon || initial)}</span>
+          <div>
+            <h2>${esc(app.name)}</h2>
+            ${app.author ? `<p class="byline">${esc(t.by)} ${esc(app.author)}</p>` : ''}
+          </div>
+        </div>
         <p class="desc">${esc(app.description)}</p>
         ${tags ? `<ul class="tags">${tags}</ul>` : ''}
         <div class="actions">
@@ -95,8 +111,21 @@ function card(app, t, hasShot, theme) {
 }
 
 function page(course, t, cards) {
-  const hero = course.hero
-    ? `<img class="hero-art" src="../brand/${esc(course.hero)}" alt="" width="494" height="381">`
+  // Only render the stat row when there is more than one — a single tile
+  // lapping over the hero looks like something failed to load.
+  const stats = (course.stats || []).length > 1
+    ? `<div class="wrap">
+  <ul class="stats">
+    ${course.stats
+      .map((s) => `<li><b>${esc(s.value)}</b><span>${esc(s.label)}</span></li>`)
+      .join('\n    ')}
+  </ul>
+</div>`
+    : '';
+
+  const secHead = course.appsHeading
+    ? `<div class="sec-head"><span class="no">01</span><h2>${esc(course.appsHeading)}</h2></div>
+  ${course.appsLead ? `<p class="lead">${esc(course.appsLead)}</p>` : ''}`
     : '';
 
   const partners = (course.partners || []).length
@@ -119,23 +148,22 @@ function page(course, t, cards) {
 <meta name="description" content="${esc(course.intro).slice(0, 160)}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body${course.theme ? ` class="theme-${esc(course.theme)}"` : ''}>
 <header class="masthead">
-  <div class="wrap hero">
-    <div>
-      ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
-      <h1>${headline(course.title)}</h1>
-      <p class="intro">${esc(course.intro)}</p>
-      <p class="count">${esc(t.counter(course.apps.length))}</p>
-    </div>
-    ${hero}
+  <div class="wrap">
+    ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
+    <h1>${headline(course.title)}</h1>
+    <p class="intro">${esc(course.intro)}</p>
   </div>
 </header>
 
+${stats}
+
 <main class="wrap">
+  ${secHead}
   <ul class="grid">
 ${cards}
   </ul>
