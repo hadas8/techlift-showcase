@@ -4,13 +4,14 @@
 // the sheet comes back with no usable rows, the existing apps.json is left
 // alone and the script exits non-zero. A broken sheet must not be able to
 // empty the showcase.
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')));
 const CONFIG = path.join(ROOT, 'data', 'sheet.json');
 const OUT = path.join(ROOT, 'data', 'apps.json');
+const SHOTS_DIR = path.join(ROOT, 'public', 'screenshots');
 
 /** Minimal but correct CSV reader: handles quoted fields, escaped quotes ("")
  *  and newlines inside quotes. Google's export uses all three. */
@@ -110,6 +111,85 @@ function toApps(rows) {
   return { apps, problems };
 }
 
+const DRIVE_ID = [/\/file\/d\/([\w-]{20,})/, /[?&]id=([\w-]{20,})/];
+const EXT = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+  'image/avif': 'avif',
+};
+
+const MAX_BYTES = 8 * 1024 * 1024;
+const CHUBBY = 1.5 * 1024 * 1024;
+
+/** Small stable hash, so a plain image url always maps to the same filename. */
+function shortHash(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(36);
+}
+
+/** Turns a Drive share link (or any image url) in the `screenshot` column into
+ *  a file committed under public/screenshots, and returns the local filename.
+ *  Downloads once: an existing file with the same derived name is left alone,
+ *  so repeat runs are cheap and produce no commit churn. */
+async function fetchImage(value, name, notes) {
+  const driveId = DRIVE_ID.map((re) => value.match(re)?.[1]).find(Boolean);
+  const src = driveId
+    ? `https://drive.google.com/uc?export=download&id=${driveId}`
+    : value;
+  const stem = driveId ? `drive-${driveId}` : `img-${shortHash(value)}`;
+
+  const existing = (await readdir(SHOTS_DIR).catch(() => [])).find(
+    (f) => f.replace(/\.[^.]+$/, '') === stem
+  );
+  if (existing) return existing;
+
+  let res;
+  try {
+    res = await fetch(src, { redirect: 'follow', signal: AbortSignal.timeout(45000) });
+  } catch (err) {
+    notes.push(`${name}: image download failed (${err.name}) — card keeps its icon`);
+    return '';
+  }
+
+  if (!res.ok) {
+    notes.push(`${name}: image download failed (HTTP ${res.status}) — card keeps its icon`);
+    return '';
+  }
+
+  const type = (res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+
+  if (!EXT[type]) {
+    // Drive serves an HTML page rather than the file when the link is not
+    // openly shared, which is far and away the most common cause here.
+    const hint = driveId && type.startsWith('text/html')
+      ? ' — the Drive file is probably not shared with "anyone with the link"'
+      : ` — expected an image, got ${type || 'no content-type'}`;
+    notes.push(`${name}: image skipped${hint}`);
+    return '';
+  }
+
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (buf.byteLength > MAX_BYTES) {
+    notes.push(`${name}: image skipped — ${(buf.byteLength / 1048576).toFixed(1)}MB is over the 8MB limit`);
+    return '';
+  }
+  if (buf.byteLength > CHUBBY) {
+    notes.push(`${name}: image is ${(buf.byteLength / 1048576).toFixed(1)}MB — worth shrinking, it will be slow on phones`);
+  }
+
+  const filename = `${stem}.${EXT[type]}`;
+  await mkdir(SHOTS_DIR, { recursive: true });
+  await writeFile(path.join(SHOTS_DIR, filename), buf);
+  console.log(`  + downloaded ${filename} for ${name} (${Math.round(buf.byteLength / 1024)}kb)`);
+  return filename;
+}
+
 /** Reports which app URLs are not answering. Never removes them — a student's
  *  app vanishing from the page without a word is worse than a dead link. */
 async function checkLinks(apps) {
@@ -179,6 +259,18 @@ async function main() {
 
   if (!apps.length) throw new Error('no usable rows — refusing to write an empty roster');
 
+  // A screenshot cell holding a link (Drive share url, or any image url) is
+  // downloaded into public/screenshots and replaced with the local filename.
+  // A bare filename is left as-is, for images added to the repo by hand.
+  const imageNotes = [];
+  for (const app of apps) {
+    if (!app.screenshot || !/^https?:\/\//i.test(app.screenshot)) continue;
+    const local = await fetchImage(app.screenshot, app.name, imageNotes);
+    if (local) app.screenshot = local;
+    else delete app.screenshot;
+  }
+  for (const n of imageNotes) console.warn(`  ! ${n}`);
+
   const byCourse = {};
   for (const app of apps) {
     const { course, ...rest } = app;
@@ -199,12 +291,14 @@ async function main() {
     for (const [course, list] of Object.entries(byCourse)) console.log(`  ${course}: ${list.length}`);
   }
 
-  if (dead.length && process.env.GITHUB_STEP_SUMMARY) {
-    await writeFile(
-      process.env.GITHUB_STEP_SUMMARY,
-      `### Link check\n\n${dead.map((d) => `- ${d}`).join('\n')}\n`,
-      { flag: 'a' }
-    );
+  const summary = [
+    problems.length && `### Rows skipped\n\n${problems.map((p) => `- ${p}`).join('\n')}`,
+    imageNotes.length && `### Images\n\n${imageNotes.map((n) => `- ${n}`).join('\n')}`,
+    dead.length && `### Link check\n\n${dead.map((d) => `- ${d}`).join('\n')}`,
+  ].filter(Boolean);
+
+  if (summary.length && process.env.GITHUB_STEP_SUMMARY) {
+    await writeFile(process.env.GITHUB_STEP_SUMMARY, summary.join('\n\n') + '\n', { flag: 'a' });
   }
 }
 

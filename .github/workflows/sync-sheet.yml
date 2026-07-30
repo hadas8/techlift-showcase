@@ -36,9 +36,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Stage first, then diff the index. `git diff` alone cannot see an
-          # untracked file, which is exactly the case on the very first sync.
-          git add data/apps.json
-          if git diff --cached --quiet -- data/apps.json; then
+          # untracked file, which is exactly the case on the very first sync
+          # and every time a new screenshot is downloaded.
+          git add data/apps.json public/screenshots
+          if git diff --cached --quiet -- data/apps.json public/screenshots; then
             echo "No roster change."
             exit 0
           fi

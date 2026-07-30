@@ -36,7 +36,7 @@ doesn't matter and unknown columns are ignored.
 | `repo` | | |
 | `tags` | | Separate with `\|` or `,` |
 | `icon` | | One emoji. Falls back to the first letter of the name. |
-| `screenshot` | | Filename of an image already in `public/screenshots/`. A name with no matching file is ignored, with a warning. |
+| `screenshot` | | A Google Drive share link, any public image url, or the filename of an image already in `public/screenshots/`. See below. |
 | `hidden` | | Keeps a row out of the site — use it to stage an app before it's ready |
 | `no-embed` | | Card opens the app in a new tab instead of embedding it |
 
@@ -46,6 +46,32 @@ counts as yes; blank or anything else counts as no. `x` deliberately does
 
 The least ambiguous option is a real checkbox — select the cells and use
 **Insert → Checkbox**. Those export as `TRUE`/`FALSE`, which is handled.
+
+### Screenshots
+
+Put the image in the Drive folder next to the sheet, right-click → **Share →
+Copy link**, and paste that link into the `screenshot` column. The image must
+be shared with **anyone with the link**; a folder shared that way passes the
+setting on to everything inside it, so this is usually a one-time change.
+
+The sync downloads the image and commits it to `public/screenshots/`. The
+site serves it from there — it is never hotlinked from Drive, which Google
+throttles and which would make every page load depend on Drive answering.
+
+Each image is downloaded once. Repeat runs see the file already present and
+skip it, so nothing re-downloads and no pointless commits appear.
+
+Also accepted in that column: any public image url, or the bare filename of
+an image already committed to `public/screenshots/`.
+
+If an image can't be fetched the card simply keeps its emoji tile and the
+reason is listed in the workflow summary — a missing screenshot never breaks
+a card. By far the most common reason is a Drive file that isn't
+link-shared, which the summary calls out by name.
+
+Images over 8MB are skipped; anything over 1.5MB is accepted with a warning
+that it should be shrunk. Somewhere around 1440×900 is plenty — they display
+at 16:10.
 
 `data/sheet-template.csv` has these headers and two example rows. Import it
 into a blank Sheet (File → Import) to start with the columns correct.
