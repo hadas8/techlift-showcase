@@ -6,7 +6,7 @@ import path from 'node:path';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 const COURSES = path.join(ROOT, 'data', 'courses');
-const ROSTER = path.join(ROOT, 'data', 'apps.json');
+const SHEET_DATA = path.join(ROOT, 'data', 'sheet-data.json');
 const SRC = path.join(ROOT, 'src');
 const SHOTS = path.join(ROOT, 'public', 'screenshots');
 const BRAND = path.join(ROOT, 'public', 'brand');
@@ -220,9 +220,9 @@ async function main() {
     }
   }
 
-  // Roster synced from the Google Sheet, if there is one. Falls back to the
-  // apps listed in the course file, so the repo builds on its own.
-  const roster = existsSync(ROSTER) ? JSON.parse(await readFile(ROSTER, 'utf8')) : {};
+  // Synced from the course sheets, if any. Falls back to what is in the
+  // course file, so the repo builds on its own.
+  const sheet = existsSync(SHEET_DATA) ? JSON.parse(await readFile(SHEET_DATA, 'utf8')) : {};
 
   const files = (await readdir(COURSES)).filter((f) => f.endsWith('.json'));
   const built = [];
@@ -232,12 +232,20 @@ async function main() {
     const t = STRINGS[course.lang];
     if (!t) throw new Error(`${file}: unknown language "${course.lang}"`);
 
-    const fromSheet = roster[course.slug];
-    if (fromSheet?.length) {
-      course.apps = fromSheet;
-      console.log(`  /${course.slug}/  roster from sheet (${fromSheet.length} apps)`);
-    } else if (Object.keys(roster).length) {
-      console.warn(`  ! /${course.slug}/  no rows in the sheet for this course — using the course file`);
+    const fromSheet = sheet[course.slug];
+
+    // Settings the instructor typed into the sheet win over the course file,
+    // which keeps the structural bits (slug, language, theme, logos).
+    if (fromSheet?.settings) {
+      Object.assign(course, fromSheet.settings);
+      console.log(`  /${course.slug}/  ${Object.keys(fromSheet.settings).length} settings from sheet`);
+    }
+
+    if (fromSheet?.apps?.length) {
+      course.apps = fromSheet.apps;
+      console.log(`  /${course.slug}/  ${fromSheet.apps.length} apps from sheet`);
+    } else if (Object.keys(sheet).length) {
+      console.warn(`  ! /${course.slug}/  no app rows in the sheet — using the course file`);
     }
 
     if (!course.apps?.length) throw new Error(`${file}: no apps, from the sheet or the file`);

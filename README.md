@@ -3,32 +3,61 @@
 Static showcase for apps built by students on the vibe-coding workshop.
 One page per course, each in its own language, deployed to GitHub Pages.
 
-## Where the app list comes from
+## Where the content comes from
 
-Two sources, on purpose:
+**One spreadsheet per course.** Sheets cannot show one person only one tab —
+"protect sheet" restricts editing, not viewing — so a separate file per
+course is the only way to give an instructor their own cohort without
+handing them everybody else's.
 
-| What | Lives in | Changes |
-|---|---|---|
-| Course chrome — title, intro, language, logos | `data/courses/*.json` | Rarely, by whoever runs the site |
-| The apps themselves | A Google Sheet | Often, by instructors |
+`data/sheets.json` maps each course slug to its published CSV url:
 
-An automation reads the sheet a few times a day and writes `data/apps.json`
-into the repo. The site is built from **that file**, never from the sheet
+```json
+{
+  "he": "https://docs.google.com/…&output=csv",
+  "autumn-2026-he": "https://docs.google.com/…&output=csv"
+}
+```
+
+An automation reads them a few times a day and writes `data/sheet-data.json`
+into the repo. The site is built from **that file**, never from the sheets
 directly — so a visitor loading the page never waits on Google, and an
 unshared or broken sheet cannot blank the showcase.
 
-If the sheet has no rows for a course, that course falls back to the `apps`
-listed in its own JSON file. That's also why the repo builds on a fresh clone
-with no sheet configured at all.
+A sheet that fails only affects its own course; the others sync normally and
+the failed course keeps the data from its last good run. Every sheet failing
+is treated as systemic and nothing is overwritten at all.
 
-### Sheet columns
+Anything the sheet doesn't provide falls back to the course's own JSON file,
+which is why the repo builds on a fresh clone with no sheets configured.
 
-One row per app. The header row is matched case-insensitively; column order
-doesn't matter and unknown columns are ignored.
+### What each sheet holds
+
+Two blocks in one tab. `key,value` rows of course settings at the top, then
+the app table. The app table is found automatically — it starts at the first
+row with `name` and `url` headings — so the settings block can be any length.
+
+**Settings block** (all optional, and `**text**` gets the yellow highlight):
+
+| Key | What it sets |
+|---|---|
+| `title` | The big headline |
+| `cohort` | Small label above it, e.g. the class name or dates |
+| `intro` | Paragraph under the headline |
+| `appsHeading` | Heading over the app grid |
+| `appsLead` | Line under that heading |
+| `note` | Small print in the footer |
+| `partnersLabel` | Label over the partner logos |
+
+Structural things — the slug, language, theme and partner logos — stay in
+`data/courses/*.json` on purpose. A typo in those breaks the page rather than
+just reading badly, so they aren't left to a spreadsheet.
+
+**App table** — one row per app. Headings are matched case-insensitively,
+column order doesn't matter, unknown columns are ignored.
 
 | Column | Required | Notes |
 |---|---|---|
-| `course` | **yes** | Must match a course `slug`, e.g. `he`. A row with no course belongs to no page and is skipped. |
 | `name` | **yes** | |
 | `url` | **yes** | Must start with `http://` or `https://` |
 | `description` | | |
@@ -73,33 +102,38 @@ Images over 8MB are skipped; anything over 1.5MB is accepted with a warning
 that it should be shrunk. Somewhere around 1440×900 is plenty — they display
 at 16:10.
 
-`data/sheet-template.csv` has these headers and two example rows. Import it
-into a blank Sheet (File → Import) to start with the columns correct.
+## Starting a new course
 
-### Connecting the sheet
-
-1. In Sheets: **File → Share → Publish to web**, pick the tab, choose
-   **Comma-separated values (.csv)**, publish. Copy the url — it ends in
+1. **Make the sheet.** Import `data/course-template.csv` into a blank
+   spreadsheet (File → Import → Upload → *Replace spreadsheet*). It has the
+   settings block and the app headings already laid out. Fill in the settings,
+   delete the example app row, share the file with that course's instructor.
+2. **Publish it.** File → Share → **Publish to web**, pick the tab, choose
+   **Comma-separated values (.csv)**, Publish. Copy the url — it ends in
    `output=csv`.
-2. In the repo: **Settings → Secrets and variables → Actions → Variables**,
-   add `SHEET_CSV_URL` with that url.
+3. **Add the course file.** Copy an existing `data/courses/*.json`, change the
+   `slug`, and set `lang`/`theme`/`partners`. Title and intro can be left out
+   entirely if the sheet provides them.
+4. **Register the sheet.** Add `"your-slug": "the-published-url"` to
+   `data/sheets.json`.
+5. Run the **Sync roster from Google Sheet** workflow.
 
-Publishing makes the sheet's contents readable by anyone with that url, so
-keep it to what's going on the public site anyway — no private notes,
-no personal details about students.
+Publishing makes that sheet readable by anyone with the url, so keep its
+contents to what is going on the public site anyway — no private notes, no
+personal details about students.
 
-For local work, `cp data/sheet.example.json data/sheet.json` and put the url
-there instead; that file is gitignored. A local `.csv` path works too, which
-is handy for testing without publishing anything.
+For local work, a plain `.csv` path works anywhere a url does, so a
+downloaded sheet can be tested without publishing. `SHEET_CSV_URL=path.csv`
+overrides every source at once, which is handy for trying a layout out.
 
 ### Running and troubleshooting the sync
 
 ```bash
-npm run sync      # pull the sheet, write data/apps.json
+npm run sync      # pull every sheet, write data/sheet-data.json
 ```
 
 It prints a line per rejected row explaining why. It refuses to write an
-empty roster, and on any failure it leaves `data/apps.json` untouched and
+empty roster, and a sheet that fails leaves its own course data untouched and
 exits non-zero.
 
 It also checks that every app url still answers, and lists any that don't in
@@ -108,7 +142,7 @@ app disappearing from the page without a word is worse than a broken link.
 
 The **Sync roster from Google Sheet** workflow runs on a schedule and can be
 triggered by hand from the Actions tab. When the roster changes it commits
-`data/apps.json`, which triggers the deploy.
+`data/sheet-data.json`, which triggers the deploy.
 
 ## Adding or changing a course
 

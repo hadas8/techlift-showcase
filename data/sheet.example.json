@@ -1,4 +1,0 @@
-{
-  "_comment": "Copy this to sheet.json and paste your published CSV url below. In Sheets: File → Share → Publish to web → choose the tab → Comma-separated values (.csv) → Publish. The url ends in output=csv. A local .csv path also works, for testing.",
-  "csvUrl": "PUT-YOUR-PUBLISHED-CSV-URL-HERE"
-}

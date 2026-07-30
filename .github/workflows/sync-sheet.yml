@@ -23,13 +23,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Pull the sheet
+      - name: Pull the sheets
         run: npm run sync
-        env:
-          # Optional override, so the url can live in repo settings instead of
-          # in the committed config. Settings → Secrets and variables →
-          # Actions → Variables.
-          SHEET_CSV_URL: ${{ vars.SHEET_CSV_URL }}
 
       - name: Commit if the roster changed
         run: |
@@ -38,8 +33,8 @@ jobs:
           # Stage first, then diff the index. `git diff` alone cannot see an
           # untracked file, which is exactly the case on the very first sync
           # and every time a new screenshot is downloaded.
-          git add data/apps.json public/screenshots
-          if git diff --cached --quiet -- data/apps.json public/screenshots; then
+          git add data/sheet-data.json public/screenshots
+          if git diff --cached --quiet -- data/sheet-data.json public/screenshots; then
             echo "No roster change."
             exit 0
           fi

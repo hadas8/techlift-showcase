@@ -9,9 +9,22 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')));
-const CONFIG = path.join(ROOT, 'data', 'sheet.json');
-const OUT = path.join(ROOT, 'data', 'apps.json');
+const CONFIG = path.join(ROOT, 'data', 'sheets.json');
+const OUT = path.join(ROOT, 'data', 'sheet-data.json');
 const SHOTS_DIR = path.join(ROOT, 'public', 'screenshots');
+
+// Course fields an instructor may set from the sheet. Everything else —
+// slug, language, theme, partner logos — stays in the repo, because it is
+// structural rather than content and a typo in it breaks the page.
+const SETTINGS = {
+  title: 'title',
+  cohort: 'cohort',
+  intro: 'intro',
+  note: 'note',
+  appsheading: 'appsHeading',
+  appslead: 'appsLead',
+  partnerslabel: 'partnersLabel',
+};
 
 /** Minimal but correct CSV reader: handles quoted fields, escaped quotes ("")
  *  and newlines inside quotes. Google's export uses all three. */
@@ -53,7 +66,35 @@ function parseCsv(text) {
 const YES = ['yes', 'y', 'true', '1', 'כן', 'v', '✓', '✔', '√'];
 const truthy = (v) => YES.includes(String(v).trim().toLowerCase());
 
-function toApps(rows) {
+/** A course sheet is one tab holding two things: `key, value` rows of course
+ *  settings at the top, then the app table. The app table starts at the first
+ *  row that has both a `name` and a `url` cell, which is unambiguous enough
+ *  to find without asking anyone to count rows. */
+function split(rows) {
+  const headerAt = rows.findIndex((r) => {
+    const cells = r.map((c) => c.trim().toLowerCase());
+    return cells.includes('name') && cells.includes('url');
+  });
+
+  if (headerAt === -1) {
+    throw new Error(
+      'could not find the app table — expected a row with "name" and "url" headings. ' +
+      'Start from data/course-template.csv if the sheet was built by hand.'
+    );
+  }
+
+  const settings = {};
+  for (const row of rows.slice(0, headerAt)) {
+    const key = (row[0] || '').trim().toLowerCase().replace(/[\s_-]/g, '');
+    const value = (row[1] || '').trim();
+    if (!key || !value) continue;
+    if (SETTINGS[key]) settings[SETTINGS[key]] = value;
+  }
+
+  return { settings, table: rows.slice(headerAt) };
+}
+
+function toApps(rows, defaultCourse) {
   const [header, ...body] = rows;
   const cols = header.map((h) => h.trim().toLowerCase());
   const at = (row, key) => {
@@ -68,7 +109,9 @@ function toApps(rows) {
     const line = n + 2; // 1-indexed, plus the header
     const name = at(row, 'name');
     const url = at(row, 'url');
-    const course = at(row, 'course');
+    // A `course` column still wins if present, so one sheet can feed several
+    // pages. Without it, every row belongs to the sheet's own course.
+    const course = at(row, 'course') || defaultCourse;
 
     if (truthy(at(row, 'hidden'))) return;
 
@@ -211,87 +254,141 @@ async function checkLinks(apps) {
   return dead;
 }
 
-async function main() {
-  // The env var wins, so CI can take the url from a repo variable and never
-  // need the config file at all.
-  let url = process.env.SHEET_CSV_URL || '';
-
-  if (!url && existsSync(CONFIG)) {
-    url = JSON.parse(await readFile(CONFIG, 'utf8')).csvUrl || '';
+async function load(source) {
+  if (/^https?:\/\//i.test(source)) {
+    console.log(`  fetching ${source.replace(/\/d\/e\/[^/]+/, '/d/e/…')}`);
+    const res = await fetch(source, { redirect: 'follow', signal: AbortSignal.timeout(30000) });
+    if (!res.ok) throw new Error(`fetch failed: HTTP ${res.status}`);
+    return res.text();
   }
+  // A local path works too, so a downloaded csv can be tested without
+  // publishing anything.
+  console.log(`  reading ${source}`);
+  return readFile(path.resolve(ROOT, source), 'utf8');
+}
 
-  if (!url || url.includes('PUT-YOUR')) {
-    console.error(
-      'No sheet url configured. Either set the SHEET_CSV_URL repo variable\n' +
-      '(Settings → Secrets and variables → Actions → Variables), or copy\n' +
-      'data/sheet.example.json to data/sheet.json and put the url in it.'
-    );
-    process.exitCode = 1;
-    return;
-  }
-
-  let text;
-
-  if (/^https?:\/\//i.test(url)) {
-    console.log(`Fetching ${url.replace(/\/d\/e\/[^/]+/, '/d/e/…')}`);
-    const res = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(30000) });
-    if (!res.ok) throw new Error(`sheet fetch failed: HTTP ${res.status}`);
-    text = await res.text();
-  } else {
-    // A local path works too, so a downloaded csv can be tested without
-    // publishing anything.
-    console.log(`Reading ${url}`);
-    text = await readFile(path.resolve(ROOT, url), 'utf8');
-  }
+async function readCourse(slug, source, problems, imageNotes) {
+  const text = await load(source);
 
   if (/^\s*<!doctype html/i.test(text) || /<html/i.test(text.slice(0, 400))) {
     throw new Error(
-      'the sheet returned a web page, not CSV. It is probably not published to the web, ' +
+      'returned a web page, not CSV. It is probably not published to the web, ' +
       'or the url is the normal edit link rather than the published csv one.'
     );
   }
 
   const rows = parseCsv(text);
-  if (rows.length < 2) throw new Error('sheet has a header but no rows');
+  if (!rows.length) throw new Error('sheet is empty');
 
-  const { apps, problems } = toApps(rows);
-  for (const p of problems) console.warn(`  ! ${p}`);
+  const { settings, table } = split(rows);
+  if (table.length < 2) throw new Error('the app table has headings but no rows');
 
-  if (!apps.length) throw new Error('no usable rows — refusing to write an empty roster');
+  const { apps, problems: rowProblems } = toApps(table, slug);
+  problems.push(...rowProblems.map((p) => `[${slug}] ${p}`));
+
+  if (!apps.length) throw new Error('no usable app rows');
 
   // A screenshot cell holding a link (Drive share url, or any image url) is
   // downloaded into public/screenshots and replaced with the local filename.
-  // A bare filename is left as-is, for images added to the repo by hand.
-  const imageNotes = [];
+  // A bare filename is left alone, for images added to the repo by hand.
   for (const app of apps) {
     if (!app.screenshot || !/^https?:\/\//i.test(app.screenshot)) continue;
     const local = await fetchImage(app.screenshot, app.name, imageNotes);
     if (local) app.screenshot = local;
     else delete app.screenshot;
   }
-  for (const n of imageNotes) console.warn(`  ! ${n}`);
 
-  const byCourse = {};
-  for (const app of apps) {
-    const { course, ...rest } = app;
-    (byCourse[course] ||= []).push(rest);
+  return { settings, apps };
+}
+
+async function main() {
+  if (!existsSync(CONFIG)) {
+    console.error(
+      `No ${path.relative(ROOT, CONFIG)}. It maps each course slug to its published CSV url:\n` +
+      '  { "he": "https://docs.google.com/…&output=csv" }'
+    );
+    process.exitCode = 1;
+    return;
   }
 
-  const dead = await checkLinks(apps);
+  const config = JSON.parse(await readFile(CONFIG, 'utf8'));
+  const courses = Object.entries(config).filter(([slug]) => !slug.startsWith('_'));
+
+  if (!courses.length) {
+    console.error(`No courses in ${path.relative(ROOT, CONFIG)}.`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const problems = [];
+  const imageNotes = [];
+  const failures = [];
+  const result = {};
+  let allApps = [];
+
+  for (const [slug, source] of courses) {
+    console.log(`\n${slug}:`);
+    try {
+      // SHEET_CSV_URL overrides every source — for local testing against one
+      // downloaded file, not for production use.
+      const { settings, apps } = await readCourse(
+        slug,
+        process.env.SHEET_CSV_URL || source,
+        problems,
+        imageNotes
+      );
+
+      // Rows can name a different course; honour that so one sheet can still
+      // feed several pages if you ever want it to.
+      for (const app of apps) {
+        const { course, ...rest } = app;
+        (result[course] ||= { apps: [] }).apps.push(rest);
+      }
+      if (Object.keys(settings).length) {
+        (result[slug] ||= { apps: [] }).settings = settings;
+      }
+
+      allApps = allApps.concat(apps);
+      console.log(`  ${apps.length} apps${Object.keys(settings).length ? `, ${Object.keys(settings).length} settings` : ''}`);
+    } catch (err) {
+      failures.push(`${slug}: ${err.message}`);
+      console.error(`  ! ${err.message}`);
+    }
+  }
+
+  for (const p of problems) console.warn(`  ! ${p}`);
+  for (const n of imageNotes) console.warn(`  ! ${n}`);
+
+  // One broken sheet must not wipe the courses that are fine, and every sheet
+  // failing means something systemic — neither should overwrite good data.
+  if (failures.length === courses.length) {
+    throw new Error(`every sheet failed:\n  ${failures.join('\n  ')}`);
+  }
+  if (failures.length) {
+    console.warn(`\n  ! ${failures.length} of ${courses.length} sheets failed; keeping the previous data for those.`);
+    const previousData = existsSync(OUT) ? JSON.parse(await readFile(OUT, 'utf8')) : {};
+    for (const f of failures) {
+      const slug = f.split(':')[0];
+      if (previousData[slug]) result[slug] = previousData[slug];
+    }
+  }
+
+  const dead = await checkLinks(allApps);
   for (const d of dead) console.warn(`  ! link check: ${d}`);
 
+  const ordered = Object.fromEntries(Object.entries(result).sort(([a], [b]) => a.localeCompare(b)));
   const previous = existsSync(OUT) ? await readFile(OUT, 'utf8') : '';
-  const next = JSON.stringify(byCourse, null, 2) + '\n';
+  const next = JSON.stringify(ordered, null, 2) + '\n';
 
   if (previous === next) {
-    console.log(`\nNo change — ${apps.length} apps across ${Object.keys(byCourse).length} course(s).`);
+    console.log(`\nNo change — ${allApps.length} apps.`);
   } else {
     await writeFile(OUT, next, 'utf8');
-    console.log(`\nWrote ${path.relative(ROOT, OUT)} — ${apps.length} apps across ${Object.keys(byCourse).length} course(s):`);
-    for (const [course, list] of Object.entries(byCourse)) console.log(`  ${course}: ${list.length}`);
+    console.log(`\nWrote ${path.relative(ROOT, OUT)} — ${allApps.length} apps.`);
   }
 
   const summary = [
+    failures.length && `### Sheets that failed\n\n${failures.map((f) => `- ${f}`).join('\n')}`,
     problems.length && `### Rows skipped\n\n${problems.map((p) => `- ${p}`).join('\n')}`,
     imageNotes.length && `### Images\n\n${imageNotes.map((n) => `- ${n}`).join('\n')}`,
     dead.length && `### Link check\n\n${dead.map((d) => `- ${d}`).join('\n')}`,

@@ -4,4 +4,4 @@ dist/
 *.log
 
 # Local sheet url. In CI this comes from the SHEET_CSV_URL repo variable.
-data/sheet.json
+data/sheets.local.json
