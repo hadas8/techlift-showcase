@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
+    "sync": "node scripts/sync-sheet.mjs",
     "serve": "node --run build && npx --yes serve dist"
   }
 }

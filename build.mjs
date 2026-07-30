@@ -6,6 +6,7 @@ import path from 'node:path';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 const COURSES = path.join(ROOT, 'data', 'courses');
+const ROSTER = path.join(ROOT, 'data', 'apps.json');
 const SRC = path.join(ROOT, 'src');
 const SHOTS = path.join(ROOT, 'public', 'screenshots');
 const BRAND = path.join(ROOT, 'public', 'brand');
@@ -219,6 +220,10 @@ async function main() {
     }
   }
 
+  // Roster synced from the Google Sheet, if there is one. Falls back to the
+  // apps listed in the course file, so the repo builds on its own.
+  const roster = existsSync(ROSTER) ? JSON.parse(await readFile(ROSTER, 'utf8')) : {};
+
   const files = (await readdir(COURSES)).filter((f) => f.endsWith('.json'));
   const built = [];
 
@@ -226,6 +231,16 @@ async function main() {
     const course = JSON.parse(await readFile(path.join(COURSES, file), 'utf8'));
     const t = STRINGS[course.lang];
     if (!t) throw new Error(`${file}: unknown language "${course.lang}"`);
+
+    const fromSheet = roster[course.slug];
+    if (fromSheet?.length) {
+      course.apps = fromSheet;
+      console.log(`  /${course.slug}/  roster from sheet (${fromSheet.length} apps)`);
+    } else if (Object.keys(roster).length) {
+      console.warn(`  ! /${course.slug}/  no rows in the sheet for this course — using the course file`);
+    }
+
+    if (!course.apps?.length) throw new Error(`${file}: no apps, from the sheet or the file`);
 
     const cards = course.apps
       .map((app) => {
