@@ -1,0 +1,28 @@
+{
+  "he": [
+    {
+      "name": "טוב שנשאר",
+      "url": "https://service-2383.ai.studio/",
+      "description": "חיבור בין אוכל איכותי שנשאר מאירועים לבין אנשים ומשפחות שזקוקים לו, לפני שהוא נזרק.",
+      "author": "הדס",
+      "repo": "https://github.com/hadas8/food_left_googleAIStudio_app",
+      "icon": "🍲",
+      "tags": [
+        "עוזר חכם",
+        "קיימות"
+      ]
+    },
+    {
+      "name": "EcoSort: אתגר המיחזור",
+      "url": "https://hadas8.github.io/EcoSort-Webapp/",
+      "description": "משחק חינוכי אינטראקטיבי ומתוזמן שבו ממיינים פסולת לפחי המיחזור הנכונים, בסצנות משתנות.",
+      "author": "הדס",
+      "repo": "https://github.com/hadas8/EcoSort-Webapp",
+      "icon": "♻️",
+      "tags": [
+        "משחק",
+        "חינוך"
+      ]
+    }
+  ]
+}
