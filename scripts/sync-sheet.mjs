@@ -42,7 +42,15 @@ function parseCsv(text) {
   return rows.filter((r) => r.some((cell) => cell.trim() !== ''));
 }
 
-const truthy = (v) => ['yes', 'y', 'true', '1', 'כן'].includes(String(v).trim().toLowerCase());
+// Generous on purpose. A tick is the natural way to fill in a yes/no column,
+// and treating "✓" as blank would publish a row the instructor believed was
+// hidden — a silent failure in the worst direction. Sheets checkboxes export
+// as TRUE/FALSE, hence those too.
+//
+// "x" is deliberately absent: people use it for both "tick this" and "not
+// this", so honouring it would hide apps that were meant to be shown.
+const YES = ['yes', 'y', 'true', '1', 'כן', 'v', '✓', '✔', '√'];
+const truthy = (v) => YES.includes(String(v).trim().toLowerCase());
 
 function toApps(rows) {
   const [header, ...body] = rows;

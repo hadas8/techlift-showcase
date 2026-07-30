@@ -36,9 +36,16 @@ doesn't matter and unknown columns are ignored.
 | `repo` | | |
 | `tags` | | Separate with `\|` or `,` |
 | `icon` | | One emoji. Falls back to the first letter of the name. |
-| `screenshot` | | Filename in `public/screenshots/` |
-| `hidden` | | `yes` keeps a row out of the site — use it to stage an app before it's ready |
-| `no-embed` | | `yes` makes the card open in a new tab instead of embedding |
+| `screenshot` | | Filename of an image already in `public/screenshots/`. A name with no matching file is ignored, with a warning. |
+| `hidden` | | Keeps a row out of the site — use it to stage an app before it's ready |
+| `no-embed` | | Card opens the app in a new tab instead of embedding it |
+
+For the last two, any of `yes`, `y`, `true`, `1`, `כן`, `v`, `✓`, `✔`, `√`
+counts as yes; blank or anything else counts as no. `x` deliberately does
+**not** count, because people use it for both "tick this" and "not this".
+
+The least ambiguous option is a real checkbox — select the cells and use
+**Insert → Checkbox**. Those export as `TRUE`/`FALSE`, which is handled.
 
 `data/sheet-template.csv` has these headers and two example rows. Import it
 into a blank Sheet (File → Import) to start with the columns correct.
