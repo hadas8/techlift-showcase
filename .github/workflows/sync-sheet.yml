@@ -33,13 +33,15 @@ jobs:
 
       - name: Commit if the roster changed
         run: |
-          if git diff --quiet -- data/apps.json; then
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Stage first, then diff the index. `git diff` alone cannot see an
+          # untracked file, which is exactly the case on the very first sync.
+          git add data/apps.json
+          if git diff --cached --quiet -- data/apps.json; then
             echo "No roster change."
             exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/apps.json
           git commit -m "Update app roster from the sheet"
           git push
           echo "Roster updated — the deploy workflow will publish it."
