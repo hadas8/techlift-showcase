@@ -111,16 +111,29 @@ at 16:10.
 1. **Make the sheet.** Import `data/course-template.csv` into a blank
    spreadsheet (File → Import → Upload → *Replace spreadsheet*). It has the
    settings block and the app headings already laid out. Fill in the settings,
-   delete the example app row, share the file with that course's instructor.
+   delete the example app row.
 2. **Publish it.** File → Share → **Publish to web**, pick the tab, choose
    **Comma-separated values (.csv)**, Publish. Copy the url — it ends in
    `output=csv`.
-3. **Add the course file.** Copy an existing `data/courses/*.json`, change the
-   `slug`, and set `lang`/`theme`/`partners`. Title and intro can be left out
-   entirely if the sheet provides them.
-4. **Register the sheet.** Add `"your-slug": "the-published-url"` to
-   `data/sheets.json`.
-5. Run the **Sync roster from Google Sheet** workflow.
+3. **Create the course:**
+
+   ```bash
+   npm run new-course -- --slug=autumn-2026 --url="https://…&output=csv"
+   ```
+
+   That writes `data/courses/autumn-2026.json` and registers the sheet in
+   `data/sheets.json`. Partner logos are copied from an existing course in the
+   same language. Add `--lang=en` for an English page.
+
+   Doing it by hand means creating both, and a course registered in one but
+   not the other fails quietly — hence the command.
+
+4. Commit, push, then run the **Sync roster from Google Sheet** workflow.
+5. Share the sheet and the Drive screenshot folder with the instructor, along
+   with [INSTRUCTOR.md](INSTRUCTOR.md).
+
+The page appears at `/autumn-2026/` once the sheet has at least one app in it.
+A course with no apps yet is skipped rather than published empty.
 
 Publishing makes that sheet readable by anyone with the url, so keep its
 contents to what is going on the public site anyway — no private notes, no

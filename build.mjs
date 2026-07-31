@@ -226,11 +226,20 @@ async function main() {
 
   const files = (await readdir(COURSES)).filter((f) => f.endsWith('.json'));
   const built = [];
+  const seenSlugs = new Map();
 
   for (const file of files) {
     const course = JSON.parse(await readFile(path.join(COURSES, file), 'utf8'));
     const t = STRINGS[course.lang];
     if (!t) throw new Error(`${file}: unknown language "${course.lang}"`);
+    if (!course.slug) throw new Error(`${file}: no slug`);
+
+    // Two courses sharing a slug would write to the same directory, so the
+    // second would silently replace the first.
+    if (seenSlugs.has(course.slug)) {
+      throw new Error(`${file}: slug "${course.slug}" is already used by ${seenSlugs.get(course.slug)}`);
+    }
+    seenSlugs.set(course.slug, file);
 
     const fromSheet = sheet[course.slug];
 
