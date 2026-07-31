@@ -1,9 +1,9 @@
 name: Sync roster from Google Sheet
 
 on:
-  schedule:
-    # Three times a day, on the hour. Cron here is UTC.
-    - cron: "0 5,11,16 * * *"
+  # Run by hand from the Actions tab. There is deliberately no schedule: the
+  # sheet changes rarely, and an unattended job that can fail quietly is worse
+  # than pressing a button when you actually want the site updated.
   workflow_dispatch:
 
 permissions:

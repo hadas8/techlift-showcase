@@ -19,10 +19,14 @@ handing them everybody else's.
 }
 ```
 
-An automation reads them a few times a day and writes `data/sheet-data.json`
-into the repo. The site is built from **that file**, never from the sheets
-directly — so a visitor loading the page never waits on Google, and an
-unshared or broken sheet cannot blank the showcase.
+Editing a sheet does **not** change the site on its own. Someone runs the
+**Sync roster from Google Sheet** workflow from the Actions tab; that reads
+the sheets and writes `data/sheet-data.json` into the repo, which triggers a
+rebuild.
+
+The site is built from **that file**, never from the sheets directly — so a
+visitor loading the page never waits on Google, and an unshared or broken
+sheet cannot blank the showcase.
 
 A sheet that fails only affects its own course; the others sync normally and
 the failed course keeps the data from its last good run. Every sheet failing
@@ -140,9 +144,19 @@ It also checks that every app url still answers, and lists any that don't in
 the workflow summary. Dead links are reported, never removed — a student's
 app disappearing from the page without a word is worse than a broken link.
 
-The **Sync roster from Google Sheet** workflow runs on a schedule and can be
-triggered by hand from the Actions tab. When the roster changes it commits
-`data/sheet-data.json`, which triggers the deploy.
+The **Sync roster from Google Sheet** workflow runs only when someone starts
+it from the Actions tab. When anything changed it commits
+`data/sheet-data.json`, which triggers the deploy; when nothing changed it
+says so and stops.
+
+There is no schedule on purpose. If you later want one — say, so instructors
+who cannot reach GitHub still see their edits appear — add this back to
+`.github/workflows/sync-sheet.yml`:
+
+```yaml
+  schedule:
+    - cron: "0 5 * * *"   # daily, UTC
+```
 
 ## Adding or changing a course
 
