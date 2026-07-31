@@ -67,6 +67,18 @@ At the very top of the sheet there are `key, value` rows for the page itself —
 the headline, the class name or dates, the intro paragraph. Those are yours to
 edit too.
 
+Among them are the **headline numbers** shown across the top of the page.
+These take a third column, for the label:
+
+```
+stat,12,תלמידים
+stat,5,ימי קורס
+stat,auto,אפליקציות
+```
+
+Put the real number of students in your cohort. Leave `auto` where it is —
+that one counts the apps for you, so it stays right as you add rows.
+
 ## 5. Use `hidden` while you work
 
 Tick `hidden` on any row that isn't ready — a student still fixing something,

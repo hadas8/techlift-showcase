@@ -5,6 +5,9 @@ appsHeading,הפרויקטים
 appsLead,כל פרויקט נבנה מהרעיון ועד למוצר עובד שאפשר להשתמש בו כאן ועכשיו.
 note,האפליקציות הן פרויקטים לימודיים. הנתונים בהן הם נתוני הדגמה ואינם מייצגים מידע אמיתי.
 partnersLabel,בשיתוף
+stat,12,תלמידים
+stat,5,ימי קורס
+stat,auto,אפליקציות
 ,
 name,description,author,url,repo,tags,icon,screenshot,hidden,no-embed
 שם האפליקציה,מה היא עושה במשפט אחד.,שם התלמיד/ה,https://,,תגית | תגית,🚀,,,

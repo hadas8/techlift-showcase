@@ -44,33 +44,25 @@ comfortable in Hebrew, and it's a short document.
 
 ## Before showing parents or donors
 
-### 4. Do you want a row of headline numbers? And if so, which?
+### 4. ~~Headline numbers~~ — mostly settled
 
-A strip of white cards sitting across the join between the dark hero and the
-page below, each with a big number and a small label:
+The strip of numbers across the top of the page is now driven by the sheet,
+since the student count changes per course:
 
 ```
-  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-  │  12          │ │  6           │ │  10          │
-  │  תלמידים      │ │  אפליקציות    │ │  מפגשים       │
-  └──────────────┘ └──────────────┘ └──────────────┘
+stat,12,תלמידים
+stat,5,ימי קורס
+stat,auto,אפליקציות
 ```
 
-The SummerTech site does this and it works well for exactly your audience: a
-parent or donor takes in three numbers in a second, without reading anything.
-
-It's built and switched off, because the only number I can know from the data
-is the app count, and the rest would have to be invented — which shouldn't go
-on a donor-facing page.
-
-Send any three real ones — students, sessions, hours, schools, mentors — and
-it turns on. Or say no and it stays off; the page is fine without it.
+`5` days is fixed, `auto` counts the apps itself. **Still to do: add these
+rows to the live Hebrew sheet with the real student count** — until then the
+strip stays hidden.
 
 ### 5. ~~Which logo is the lightbulb?~~ — settled
 
-It's **Techlift**, the team running the course, not a partner. Moved out of
-the partner strip and into the top of the hero as the owner's mark. The
-footer now credits only עמותת בוגרי 8200 and הייטקזון.
+It's **Techlift**, the team running the course. It sits in the footer strip
+alongside עמותת בוגרי 8200 and הייטקזון.
 
 Still open within this: **a per-course partner or customer logo.** The slot
 exists — append to `partners` in the course file — and is deliberately empty

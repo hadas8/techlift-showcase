@@ -84,12 +84,24 @@ function split(rows) {
   }
 
   const settings = {};
+  const stats = [];
+
   for (const row of rows.slice(0, headerAt)) {
     const key = (row[0] || '').trim().toLowerCase().replace(/[\s_-]/g, '');
     const value = (row[1] || '').trim();
     if (!key || !value) continue;
+
+    // `stat, 12, תלמידים` — a third column, and as many rows as wanted.
+    if (key === 'stat') {
+      const label = (row[2] || '').trim();
+      if (label) stats.push({ value, label });
+      continue;
+    }
+
     if (SETTINGS[key]) settings[SETTINGS[key]] = value;
   }
+
+  if (stats.length) settings.stats = stats;
 
   return { settings, table: rows.slice(headerAt) };
 }

@@ -52,6 +52,21 @@ row with `name` and `url` headings — so the settings block can be any length.
 | `appsLead` | Line under that heading |
 | `note` | Small print in the footer |
 | `partnersLabel` | Label over the partner logos |
+| `stat` | One headline number — see below |
+
+`stat` rows are the exception to `key, value`: they take a third column for
+the label, and you can have as many as you like.
+
+```
+stat,12,תלמידים
+stat,5,ימי קורס
+stat,auto,אפליקציות
+```
+
+They render as a strip of cards lapping over the bottom of the hero. A value
+of `auto` is replaced by the number of apps on the page, so it can't go stale
+as rows are added. Fewer than two `stat` rows and the strip is hidden — one
+card alone looks like something failed to load.
 
 Structural things — the slug, language, theme and logos — stay in
 `data/courses/*.json` on purpose. A typo in those breaks the page rather than

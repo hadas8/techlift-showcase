@@ -112,12 +112,20 @@ function card(app, t, hasShot, theme) {
 }
 
 function page(course, t, cards) {
-  // Only render the stat row when there is more than one — a single tile
-  // lapping over the hero looks like something failed to load.
-  const stats = (course.stats || []).length > 1
+  // A stat whose value is "auto" counts the apps, so it can't go stale as
+  // rows are added to the sheet.
+  const statList = (course.stats || []).map((s) =>
+    /^(auto|#)$/i.test(String(s.value).trim())
+      ? { ...s, value: String(course.apps.length) }
+      : s
+  );
+
+  // Only render the row when there is more than one — a single tile lapping
+  // over the hero looks like something failed to load.
+  const stats = statList.length > 1
     ? `<div class="wrap">
   <ul class="stats">
-    ${course.stats
+    ${statList
       .map((s) => `<li><b>${esc(s.value)}</b><span>${esc(s.label)}</span></li>`)
       .join('\n    ')}
   </ul>
