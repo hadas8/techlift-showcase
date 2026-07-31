@@ -248,7 +248,13 @@ async function main() {
       console.warn(`  ! /${course.slug}/  no app rows in the sheet — using the course file`);
     }
 
-    if (!course.apps?.length) throw new Error(`${file}: no apps, from the sheet or the file`);
+    // A course with no apps yet is a normal state — the sheet gets set up
+    // before the students have built anything. Skip it rather than failing
+    // the build, which would stop every other course from deploying too.
+    if (!course.apps?.length) {
+      console.warn(`  ! /${course.slug}/  skipped — no apps yet`);
+      continue;
+    }
 
     const cards = course.apps
       .map((app) => {

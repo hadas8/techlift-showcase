@@ -281,12 +281,12 @@ async function readCourse(slug, source, problems, imageNotes) {
   if (!rows.length) throw new Error('sheet is empty');
 
   const { settings, table } = split(rows);
-  if (table.length < 2) throw new Error('the app table has headings but no rows');
 
+  // Zero apps is legitimate: a course sheet is set up before the students
+  // have built anything. Only a malformed sheet — one with no app table at
+  // all, which split() already rejects — counts as a failure.
   const { apps, problems: rowProblems } = toApps(table, slug);
   problems.push(...rowProblems.map((p) => `[${slug}] ${p}`));
-
-  if (!apps.length) throw new Error('no usable app rows');
 
   // A screenshot cell holding a link (Drive share url, or any image url) is
   // downloaded into public/screenshots and replaced with the local filename.
@@ -350,6 +350,7 @@ async function main() {
 
       allApps = allApps.concat(apps);
       console.log(`  ${apps.length} apps${Object.keys(settings).length ? `, ${Object.keys(settings).length} settings` : ''}`);
+      if (!apps.length) console.warn(`  ! no apps yet — /${slug}/ will not be built until there is at least one`);
     } catch (err) {
       failures.push(`${slug}: ${err.message}`);
       console.error(`  ! ${err.message}`);
