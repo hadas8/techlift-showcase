@@ -44,23 +44,37 @@ comfortable in Hebrew, and it's a short document.
 
 ## Before showing parents or donors
 
-### 4. The three numbers for the stat row
+### 4. Do you want a row of headline numbers? And if so, which?
 
-The row of statistics that overlaps the hero is built but switched off,
-because only one of the numbers is knowable from the data (the app count) and
-invented figures shouldn't go on a donor-facing page.
+A strip of white cards sitting across the join between the dark hero and the
+page below, each with a big number and a small label:
 
-Give any three — students in the cohort, sessions, hours, schools — and it
-appears.
+```
+  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+  │  12          │ │  6           │ │  10          │
+  │  תלמידים      │ │  אפליקציות    │ │  מפגשים       │
+  └──────────────┘ └──────────────┘ └──────────────┘
+```
 
-### 5. Which logo is the lightbulb?
+The SummerTech site does this and it works well for exactly your audience: a
+parent or donor takes in three numbers in a second, without reading anything.
 
-The deck names two organisations — עמותת בוגרי 8200 and הייטקזון — but there
-are three logos. The purple-blue lightbulb is currently labelled
-`לוגו שותף`, which is a placeholder.
+It's built and switched off, because the only number I can know from the data
+is the app count, and the rest would have to be invented — which shouldn't go
+on a donor-facing page.
 
-That text is what a screen reader announces and what shows if the image fails
-to load, so it should be right.
+Send any three real ones — students, sessions, hours, schools, mentors — and
+it turns on. Or say no and it stays off; the page is fine without it.
+
+### 5. ~~Which logo is the lightbulb?~~ — settled
+
+It's **Techlift**, the team running the course, not a partner. Moved out of
+the partner strip and into the top of the hero as the owner's mark. The
+footer now credits only עמותת בוגרי 8200 and הייטקזון.
+
+Still open within this: **a per-course partner or customer logo.** The slot
+exists — append to `partners` in the course file — and is deliberately empty
+until a course actually has one.
 
 ### 6. Are the logos correct for a light background?
 
@@ -130,10 +144,9 @@ Everything else in the pipeline has been run end to end. Pasting a real Drive
 share link into the `screenshot` column has not — there was no shared Drive
 file to try it with. The pilot is the natural place to find out.
 
-### 14. A stale GitHub variable
+### 14. ~~A stale GitHub variable~~ — done
 
-`SHEET_CSV_URL` is still set in the repo settings from the earlier
-single-sheet design. Nothing reads it. Worth deleting so nobody follows it.
+`SHEET_CSV_URL` has been deleted from the repo settings.
 
 ### 15. Moving to the organisation accounts
 

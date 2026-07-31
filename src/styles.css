@@ -371,6 +371,14 @@ body.modal-open { overflow: hidden; }
 
 .theme-brand .masthead .wrap { position: relative; }
 
+/* Owner's mark, top of the hero. The supplied file is a white knockout, so
+   the dark hero is the one place on the page it works unaltered. */
+.brandmark { display: block; height: 44px; width: auto; margin: 0 0 34px; }
+
+@media (max-width: 640px) {
+  .brandmark { height: 36px; margin-bottom: 26px; }
+}
+
 .theme-brand .eyebrow {
   color: #e4dcf6;
   background: rgba(255, 255, 255, .10);

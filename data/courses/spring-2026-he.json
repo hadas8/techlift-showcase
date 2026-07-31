@@ -8,11 +8,12 @@
   "note": "האפליקציות הן פרויקטים לימודיים. הנתונים בהן הם נתוני הדגמה ואינם מייצגים מידע אמיתי.",
   "appsHeading": "הפרויקטים",
   "appsLead": "כל פרויקט נבנה מהרעיון ועד למוצר עובד שאפשר להשתמש בו כאן ועכשיו.",
+  "logo": "logo-techlift.png",
+  "logoAlt": "Techlift",
   "partnersLabel": "בשיתוף",
   "partners": [
-    { "file": "logo-b.png", "name": "לוגו שותף" },
-    { "file": "logo-a.png", "name": "עמותת בוגרי 8200" },
-    { "file": "logo-c.png", "name": "הייטקזון" }
+    { "file": "logo-8200.png", "name": "עמותת בוגרי 8200" },
+    { "file": "logo-hitechzone.png", "name": "הייטקזון" }
   ],
   "apps": [
     {

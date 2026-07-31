@@ -155,6 +155,7 @@ function page(course, t, cards) {
 <body${course.theme ? ` class="theme-${esc(course.theme)}"` : ''}>
 <header class="masthead">
   <div class="wrap">
+    ${course.logo ? `<img class="brandmark" src="../brand/${esc(course.logo)}" alt="${esc(course.logoAlt || '')}" height="44">` : ''}
     ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
     <h1>${headline(course.title)}</h1>
     <p class="intro">${esc(course.intro)}</p>

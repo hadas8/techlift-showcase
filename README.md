@@ -53,9 +53,30 @@ row with `name` and `url` headings — so the settings block can be any length.
 | `note` | Small print in the footer |
 | `partnersLabel` | Label over the partner logos |
 
-Structural things — the slug, language, theme and partner logos — stay in
+Structural things — the slug, language, theme and logos — stay in
 `data/courses/*.json` on purpose. A typo in those breaks the page rather than
 just reading badly, so they aren't left to a spreadsheet.
+
+### Logos
+
+Two separate slots, because they mean different things:
+
+```jsonc
+"logo": "logo-techlift.png",     // the owner's mark, top of the hero
+"logoAlt": "Techlift",
+"partnersLabel": "בשיתוף",
+"partners": [                    // credited at the foot of the page
+  { "file": "logo-8200.png",       "name": "עמותת בוגרי 8200" },
+  { "file": "logo-hitechzone.png", "name": "הייטקזון" }
+]
+```
+
+Add a per-course partner or customer by appending to `partners`; the footer
+grows to fit. Files live in `public/brand/`.
+
+All three supplied logos are white knockouts, which is why the owner's mark
+sits on the dark hero and partners sit on the dark band at the foot. A
+coloured logo would need one of those areas rethinking.
 
 **App table** — one row per app. Headings are matched case-insensitively,
 column order doesn't matter, unknown columns are ignored.
