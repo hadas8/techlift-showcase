@@ -74,24 +74,22 @@ just reading badly, so they aren't left to a spreadsheet.
 
 ### Logos
 
-Two separate slots, because they mean different things:
+All logos sit in the strip at the foot of the page:
 
 ```jsonc
-"logo": "logo-techlift.png",     // the owner's mark, top of the hero
-"logoAlt": "Techlift",
 "partnersLabel": "בשיתוף",
-"partners": [                    // credited at the foot of the page
+"partners": [
+  { "file": "logo-techlift.png",   "name": "Techlift" },
   { "file": "logo-8200.png",       "name": "עמותת בוגרי 8200" },
   { "file": "logo-hitechzone.png", "name": "הייטקזון" }
 ]
 ```
 
-Add a per-course partner or customer by appending to `partners`; the footer
+Add a per-course partner or customer by appending to the list; the strip
 grows to fit. Files live in `public/brand/`.
 
-All three supplied logos are white knockouts, which is why the owner's mark
-sits on the dark hero and partners sit on the dark band at the foot. A
-coloured logo would need one of those areas rethinking.
+The supplied logos are white knockouts, which is why that strip is dark. A
+coloured logo would need it rethinking.
 
 **App table** — one row per app. Headings are matched case-insensitively,
 column order doesn't matter, unknown columns are ignored.
@@ -99,7 +97,7 @@ column order doesn't matter, unknown columns are ignored.
 | Column | Required | Notes |
 |---|---|---|
 | `name` | **yes** | |
-| `url` | **yes** | Must start with `http://` or `https://` |
+| `url` | **yes** | A complete address, e.g. `https://example.com/`. A bare `https://` is rejected. |
 | `description` | | |
 | `author` | | Shown under the app name |
 | `repo` | | |
@@ -146,8 +144,10 @@ at 16:10.
 
 1. **Make the sheet.** Import `data/course-template.csv` into a blank
    spreadsheet (File → Import → Upload → *Replace spreadsheet*). It has the
-   settings block and the app headings already laid out. Fill in the settings,
-   delete the example app row.
+   settings block and the app headings already laid out. Fill in the settings.
+
+   The one example app row is marked `hidden`, so it demonstrates the shape of
+   a row without publishing anything. Type over it or delete it.
 2. **Publish it.** File → Share → **Publish to web**, pick the tab, choose
    **Comma-separated values (.csv)**, Publish. Copy the url — it ends in
    `output=csv`.

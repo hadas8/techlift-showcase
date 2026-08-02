@@ -10,4 +10,4 @@ stat,5,ימי קורס
 stat,auto,אפליקציות
 ,
 name,description,author,url,repo,tags,icon,screenshot,hidden,no-embed
-שם האפליקציה,מה היא עושה במשפט אחד.,שם התלמיד/ה,https://,,תגית | תגית,🚀,,,
+שם האפליקציה — שורת דוגמה. אפשר לכתוב עליה או למחוק אותה.,מה היא עושה במשפט אחד.,שם התלמיד/ה,https://example.com/,,תגית | תגית,🚀,,yes,

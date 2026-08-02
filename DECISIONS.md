@@ -3,7 +3,7 @@
 Everything still undecided, roughly in the order it needs deciding. Nothing
 here blocks the Hebrew site, which is live and working.
 
-Last updated: 31 July 2026.
+Last updated: 02 August 2026.
 
 ---
 

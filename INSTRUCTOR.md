@@ -48,7 +48,10 @@ intentional.
 
 ## 4. Add the app to the sheet
 
-One row per app.
+One row per app, starting from the row just under the headings
+(`name`, `description`, `author`, …). There's one example row there already,
+marked `hidden` so it doesn't show on the site — type over it for your first
+app, or delete it.
 
 | Column | What to put |
 |---|---|

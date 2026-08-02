@@ -106,6 +106,18 @@ function split(rows) {
   return { settings, table: rows.slice(headerAt) };
 }
 
+/** Needs a real host, not just the right prefix: "https://" passes a prefix
+ *  test and would publish a card pointing nowhere. */
+function isRealUrl(value) {
+  let u;
+  try {
+    u = new URL(value);
+  } catch {
+    return false;
+  }
+  return ['http:', 'https:'].includes(u.protocol) && u.hostname.includes('.');
+}
+
 function toApps(rows, defaultCourse) {
   const [header, ...body] = rows;
   const cols = header.map((h) => h.trim().toLowerCase());
@@ -131,8 +143,10 @@ function toApps(rows, defaultCourse) {
       problems.push(`row ${line}: skipped — needs both name and url`);
       return;
     }
-    if (!/^https?:\/\//i.test(url)) {
-      problems.push(`row ${line} (${name}): skipped — url must start with http:// or https://`);
+    // Checking the prefix alone lets "https://" through, which is what the
+    // template's example row contained — enough to publish an empty card.
+    if (!isRealUrl(url)) {
+      problems.push(`row ${line} (${name}): skipped — "${url}" is not a complete web address`);
       return;
     }
     if (!course) {
