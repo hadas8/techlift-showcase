@@ -2,7 +2,7 @@
   "_comment": "Fixed wording, shared by every course in that language. Change it here and every page changes together. Rarely edited — the per-course things (cohort label, logos) live in data/courses/*.json instead. **text** gets the yellow highlight.",
 
   "he": {
-    "title": "האפליקציות שפותחו בתוכנית יזמות ו-AI",
+    "title": "האפליקציות שפותחו בתוכנית **יזמות ו-AI**",
     "intro": "במהלך התוכנית, בני ובנות הנוער עברו תהליך יזמי וטכנולוגי, שבו בחרו בעיה חברתית ופיתחו פיתרון לבעיה באמצעות כלי בינה מלאכותית.\nניתן לצפות בכל אחד מהפרויקטים באתר זה.",
     "appsHeading": "הפרויקטים",
     "appsLead": "כל פרויקט נבנה מהרעיון ועד למוצר עובד שאפשר להשתמש בו כאן ועכשיו.",
@@ -11,8 +11,8 @@
   },
 
   "en": {
-    "title": "What they built on the **technological entrepreneurship** course",
-    "intro": "Every app here was built from scratch by a student on the course, using AI tools. Click any of them to try it right here on the page.",
+    "title": "The apps built on the **Entrepreneurship & AI** programme",
+    "intro": "Over the course of the programme, the teenagers went through an entrepreneurial and technological process, choosing a social problem and developing a solution to it using artificial intelligence tools.\nEvery one of the projects can be viewed on this site.",
     "appsHeading": "The projects",
     "appsLead": "Each project went from an idea to a working product you can use right now.",
     "note": "These are student learning projects. The data inside them is sample data and does not represent real information.",
