@@ -4,8 +4,12 @@ You'll be given two things: a **Google Sheet** for your course, and a **Drive
 folder** next to it for screenshots. Everything you do happens in those two
 places. You don't need a GitHub account to fill in the sheet.
 
-The showcase page is built from your sheet. It does **not** update by itself —
-someone runs a sync when you're ready (see the last section).
+The list of apps on the showcase page comes from your sheet. The rest of the
+page — headline, intro, logos — is fixed by the Techlift team and is the same
+for every course.
+
+The page does **not** update by itself. Someone runs a sync when you're ready
+(step 7).
 
 ---
 
@@ -117,6 +121,27 @@ and the page updates about a minute later.
 
 Nothing you type appears on the site until that happens — so you can edit
 freely and ask for a sync when you're happy.
+
+## 8. If something you added doesn't show up
+
+The sync checks every row and skips any it can't use, rather than publishing a
+half-broken card. It records exactly which rows it skipped and why — but that
+report is on GitHub, so **you won't see it. Ask the person who ran the sync to
+read it out.**
+
+Most of the time it's one of these:
+
+- the `url` isn't a complete address — it needs the `https://` and the full
+  domain, e.g. `https://service-1234.ai.studio/`
+- the row has a name but no url, or a url but no name
+- `hidden` is still ticked
+- a screenshot's Drive file isn't shared with **anyone with the link**, so the
+  card kept its emoji instead
+
+The sync also checks that every app url still answers, and reports any that
+have stopped. Apps are never removed automatically for this — a student's work
+disappearing without a word would be worse than a broken link — so if one dies
+you'll be told and can decide what to do.
 
 ---
 
