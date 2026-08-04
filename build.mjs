@@ -155,7 +155,7 @@ function page(course, t, cards) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(plain(course.title))}${course.cohort ? ' — ' + esc(course.cohort) : ''}</title>
-<meta name="description" content="${esc(course.intro).slice(0, 160)}">
+<meta name="description" content="${esc(String(course.intro || '').replace(/\s+/g, ' ').trim()).slice(0, 160)}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -166,7 +166,12 @@ function page(course, t, cards) {
   <div class="wrap">
     ${course.cohort ? `<p class="eyebrow">${esc(course.cohort)}</p>` : ''}
     <h1>${headline(course.title)}</h1>
-    <p class="intro">${esc(course.intro)}</p>
+    ${String(course.intro || '')
+      .split(/\n+/)
+      .map((para) => para.trim())
+      .filter(Boolean)
+      .map((para) => `<p class="intro">${esc(para)}</p>`)
+      .join('\n    ')}
   </div>
 </header>
 
