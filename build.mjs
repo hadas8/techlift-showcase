@@ -138,12 +138,24 @@ function page(course, t, cards) {
   ${course.appsLead ? `<p class="lead">${esc(course.appsLead)}</p>` : ''}`
     : '';
 
-  const partners = (course.partners || []).length
+  // A partner logo whose file is missing would render as a broken image on a
+  // donor-facing page, so drop it and say so instead.
+  const logos = (course.partners || []).filter((p) => {
+    if (existsSync(path.join(BRAND, p.file))) return true;
+    console.warn(`  ! /${course.slug}/  logo "${p.file}" (${p.name}) is not in public/brand — skipped`);
+    return false;
+  });
+
+  const partners = logos.length
     ? `<section class="partners">
   <div class="wrap partners-inner">
     ${course.partnersLabel ? `<p>${esc(course.partnersLabel)}</p>` : ''}
-    ${course.partners
-      .map((p) => `<img src="../brand/${esc(p.file)}" alt="${esc(p.name)}" loading="lazy">`)
+    ${logos
+      .map((p) =>
+        // Logos differ in shape: a stacked mark needs more height than a wide
+        // wordmark before its text is legible, so height is per logo.
+        `<img src="../brand/${esc(p.file)}" alt="${esc(p.name)}"${p.height ? ` style="height:${Number(p.height)}px"` : ''} loading="lazy">`
+      )
       .join('\n    ')}
   </div>
 </section>`

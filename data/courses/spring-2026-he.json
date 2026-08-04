@@ -8,8 +8,8 @@
   "cohort": "פלייטיקה, אוגוסט 2026",
 
   "partners": [
-    { "file": "logo-techlift.png", "name": "Techlift" },
-    { "file": "logo-8200.png", "name": "עמותת בוגרי 8200" },
-    { "file": "logo-hitechzone.png", "name": "הייטקזון" }
+    { "file": "logo-8200-he.png", "name": "עמותת בוגרי 8200", "height": 74 },
+    { "file": "logo-hitechzone.png", "name": "הייטקזון" },
+    { "file": "logo-playtika.png", "name": "Playtika" }
   ]
 }
