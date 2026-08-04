@@ -1,10 +1,11 @@
 {
+  "_comment": "Per-course. Only `cohort` and `partners` normally need changing for a new course. Shared wording lives in data/site-text.json. This page has no sheet yet, so its apps are listed here as a fallback.",
+
   "slug": "en",
   "lang": "en",
-  "title": "Apps From the Workshop",
+
   "cohort": "Spring 2026 cohort",
-  "intro": "Every app here was built from scratch by a student on the workshop, using AI tools. Click any of them to try it right here on the page.",
-  "note": "These are student learning projects. The data inside them is sample data and does not represent real information.",
+
   "apps": [
     {
       "name": "Tov SheNishar",
@@ -13,7 +14,7 @@
       "url": "https://service-2383.ai.studio/",
       "repo": "https://github.com/hadas8/food_left_googleAIStudio_app",
       "tags": ["Smart assistant", "Sustainability"],
-      "screenshot": "tov-shenishar.png"
+      "icon": "🍲"
     },
     {
       "name": "EcoSort: Recycling Challenge",
@@ -22,7 +23,7 @@
       "url": "https://hadas8.github.io/EcoSort-Webapp/",
       "repo": "https://github.com/hadas8/EcoSort-Webapp",
       "tags": ["Game", "Education"],
-      "screenshot": "ecosort.png"
+      "icon": "♻️"
     }
   ]
 }

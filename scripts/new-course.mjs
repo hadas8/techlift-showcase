@@ -32,6 +32,7 @@ Creates a new course page.
   --slug   required   url path and sheet key, e.g. /autumn-2026/
   --lang   he | en    default he
   --theme             default "brand" for he, none for en
+  --cohort            label above the headline, e.g. "מחזור סתיו 2026"
   --url               published CSV url; can be added to data/sheets.json later
 `;
 
@@ -65,7 +66,6 @@ async function main() {
   // is decorative and two files claiming one slug would silently overwrite
   // each other's page at build time.
   let partners = null;
-  let partnersLabel = null;
 
   for (const f of (await readdir(COURSES)).filter((n) => n.endsWith('.json'))) {
     const existing = JSON.parse(await readFile(path.join(COURSES, f), 'utf8'));
@@ -76,12 +76,11 @@ async function main() {
       return;
     }
 
-    // Reuse the partner logos from a course in the same language, so a new
-    // cohort inherits the footer without anyone retyping filenames.
+    // Reuse the partner logos from a course in the same language as a
+    // starting point — they are the most likely thing to need changing.
     if (!partners && existing.lang === lang && existing.partners?.length) {
       partners = existing.partners;
-      partnersLabel = existing.partnersLabel || null;
-      console.log(`Copied partner logos from ${f}`);
+      console.log(`Copied partner logos from ${f} — check they are right for this course`);
     }
   }
 
@@ -91,10 +90,21 @@ async function main() {
     return;
   }
 
-  const course = { slug, lang };
+  const course = {
+    _comment:
+      'Per-course. Only `cohort` and `partners` normally need changing for a new course. ' +
+      'All shared wording lives in data/site-text.json.',
+    slug,
+    lang,
+  };
   if (theme) course.theme = theme;
-  if (partnersLabel) course.partnersLabel = partnersLabel;
+  course.cohort = opts.cohort && opts.cohort !== 'true' ? String(opts.cohort) : '';
   if (partners) course.partners = partners;
+
+  if (!course.cohort) {
+    console.warn('\n! No --cohort given. Set it in the course file before publishing —');
+    console.warn('  it is the label above the headline, e.g. "מחזור אביב 2026".');
+  }
 
   await writeFile(file, JSON.stringify(course, null, 2) + '\n', 'utf8');
   console.log(`Wrote ${path.relative(ROOT, file)}`);
@@ -125,7 +135,10 @@ Next:
   ${sheets[slug] ? '2' : '3'}. Run the "Sync roster from Google Sheet" workflow.
 
 The page appears at /${slug}/ once the sheet has at least one app in it.
-Title, cohort and intro come from the sheet — add them there, not here.`);
+
+Check data/courses/${slug}.json: the cohort label and the partner logos are
+the two things that usually differ per course. Shared wording lives in
+data/site-text.json; the sheet only supplies apps and the headline numbers.`);
 }
 
 main().catch((err) => {

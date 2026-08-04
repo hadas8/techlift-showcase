@@ -1,0 +1,21 @@
+{
+  "_comment": "Fixed wording, shared by every course in that language. Change it here and every page changes together. Rarely edited — the per-course things (cohort label, logos) live in data/courses/*.json instead. **text** gets the yellow highlight.",
+
+  "he": {
+    "title": "מה שהם בנו בקורס **יזמות טכנולוגית**",
+    "intro": "כל אפליקציה כאן נבנתה מאפס על ידי תלמיד או תלמידה בקורס, בעזרת כלי בינה מלאכותית. אפשר ללחוץ על כל אחת מהן ולהתנסות בה כאן באתר.",
+    "appsHeading": "הפרויקטים",
+    "appsLead": "כל פרויקט נבנה מהרעיון ועד למוצר עובד שאפשר להשתמש בו כאן ועכשיו.",
+    "note": "האפליקציות הן פרויקטים לימודיים. הנתונים בהן הם נתוני הדגמה ואינם מייצגים מידע אמיתי.",
+    "partnersLabel": "בשיתוף"
+  },
+
+  "en": {
+    "title": "What they built on the **technological entrepreneurship** course",
+    "intro": "Every app here was built from scratch by a student on the course, using AI tools. Click any of them to try it right here on the page.",
+    "appsHeading": "The projects",
+    "appsLead": "Each project went from an idea to a working product you can use right now.",
+    "note": "These are student learning projects. The data inside them is sample data and does not represent real information.",
+    "partnersLabel": "In partnership with"
+  }
+}

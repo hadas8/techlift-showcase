@@ -32,30 +32,37 @@ A sheet that fails only affects its own course; the others sync normally and
 the failed course keeps the data from its last good run. Every sheet failing
 is treated as systemic and nothing is overwritten at all.
 
-Anything the sheet doesn't provide falls back to the course's own JSON file,
-which is why the repo builds on a fresh clone with no sheets configured.
+If a course has no sheet rows, its apps fall back to whatever is listed in
+its own JSON file — which is why the repo builds on a fresh clone with no
+sheets configured at all.
+
+### Who edits what
+
+| What | Where | Who | How often |
+|---|---|---|---|
+| App rows, descriptions | the course's Google Sheet | instructor | constantly |
+| Headline numbers (`stat`) | the course's Google Sheet | instructor | once per course |
+| Cohort label, partner logos | `data/courses/<slug>.json` | the team | once per course |
+| All other page wording | `data/site-text.json` | the team | rarely, and it changes every page at once |
+
+The sheet reads **only** app rows and `stat` rows. Any other settings row is
+ignored and reported in the workflow summary, so someone typing `title` into
+the sheet finds out rather than wondering why nothing happened.
+
+The three layers merge in this order, each overriding the one before:
+
+```
+data/site-text.json  →  data/courses/<slug>.json  →  the sheet
+```
 
 ### What each sheet holds
 
-Two blocks in one tab. `key,value` rows of course settings at the top, then
-the app table. The app table is found automatically — it starts at the first
-row with `name` and `url` headings — so the settings block can be any length.
+Two blocks in one tab. `stat` rows at the top, then the app table. The app
+table is found automatically — it starts at the first row with `name` and
+`url` headings.
 
-**Settings block** (all optional, and `**text**` gets the yellow highlight):
-
-| Key | What it sets |
-|---|---|
-| `title` | The big headline |
-| `cohort` | Small label above it, e.g. the class name or dates |
-| `intro` | Paragraph under the headline |
-| `appsHeading` | Heading over the app grid |
-| `appsLead` | Line under that heading |
-| `note` | Small print in the footer |
-| `partnersLabel` | Label over the partner logos |
-| `stat` | One headline number — see below |
-
-`stat` rows are the exception to `key, value`: they take a third column for
-the label, and you can have as many as you like.
+`stat` rows are the exception to the usual `key, value` shape: they take a
+third column for the label, and there can be as many as you like.
 
 ```
 stat,12,תלמידים
@@ -68,28 +75,38 @@ of `auto` is replaced by the number of apps on the page, so it can't go stale
 as rows are added. Fewer than two `stat` rows and the strip is hidden — one
 card alone looks like something failed to load.
 
-Structural things — the slug, language, theme and logos — stay in
-`data/courses/*.json` on purpose. A typo in those breaks the page rather than
-just reading badly, so they aren't left to a spreadsheet.
+### Per-course settings
 
-### Logos
-
-All logos sit in the strip at the foot of the page:
+`data/courses/<slug>.json` — the two fields that normally change:
 
 ```jsonc
-"partnersLabel": "בשיתוף",
-"partners": [
-  { "file": "logo-techlift.png",   "name": "Techlift" },
-  { "file": "logo-8200.png",       "name": "עמותת בוגרי 8200" },
-  { "file": "logo-hitechzone.png", "name": "הייטקזון" }
-]
+{
+  "slug": "spring-2026",
+  "lang": "he",
+  "theme": "brand",
+
+  "cohort": "מחזור אביב 2026",          // label above the headline
+
+  "partners": [                          // logos in the strip at the foot
+    { "file": "logo-techlift.png",   "name": "Techlift" },
+    { "file": "logo-8200.png",       "name": "עמותת בוגרי 8200" },
+    { "file": "logo-hitechzone.png", "name": "הייטקזון" }
+  ]
+}
 ```
 
-Add a per-course partner or customer by appending to the list; the strip
-grows to fit. Files live in `public/brand/`.
+Logo files live in `public/brand/`. Add a course's own partner or customer by
+appending to the list; the strip grows to fit. The supplied logos are white
+knockouts, which is why that strip is dark — a coloured logo would need it
+rethinking.
 
-The supplied logos are white knockouts, which is why that strip is dark. A
-coloured logo would need it rethinking.
+### Shared wording
+
+`data/site-text.json`, one block per language. Editing it changes every
+course page in that language at once, which is the point — five cohorts
+should not drift into five slightly different intros.
+
+`**text**` gets the yellow highlight in the headline.
 
 **App table** — one row per app. Headings are matched case-insensitively,
 column order doesn't matter, unknown columns are ignored.
@@ -144,7 +161,8 @@ at 16:10.
 
 1. **Make the sheet.** Import `data/course-template.csv` into a blank
    spreadsheet (File → Import → Upload → *Replace spreadsheet*). It has the
-   settings block and the app headings already laid out. Fill in the settings.
+   `stat` rows and the app headings already laid out. Set the real student
+   count.
 
    The one example app row is marked `hidden`, so it demonstrates the shape of
    a row without publishing anything. Type over it or delete it.
@@ -154,12 +172,13 @@ at 16:10.
 3. **Create the course:**
 
    ```bash
-   npm run new-course -- --slug=autumn-2026 --url="https://…&output=csv"
+   npm run new-course -- --slug=autumn-2026 --cohort="מחזור סתיו 2026"      --url="https://…&output=csv"
    ```
 
    That writes `data/courses/autumn-2026.json` and registers the sheet in
    `data/sheets.json`. Partner logos are copied from an existing course in the
-   same language. Add `--lang=en` for an English page.
+   same language — **check they're right for this course**. Add `--lang=en`
+   for an English page.
 
    Doing it by hand means creating both, and a course registered in one but
    not the other fails quietly — hence the command.

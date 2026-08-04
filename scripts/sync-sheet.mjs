@@ -13,18 +13,13 @@ const CONFIG = path.join(ROOT, 'data', 'sheets.json');
 const OUT = path.join(ROOT, 'data', 'sheet-data.json');
 const SHOTS_DIR = path.join(ROOT, 'public', 'screenshots');
 
-// Course fields an instructor may set from the sheet. Everything else —
-// slug, language, theme, partner logos — stays in the repo, because it is
-// structural rather than content and a typo in it breaks the page.
-const SETTINGS = {
-  title: 'title',
-  cohort: 'cohort',
-  intro: 'intro',
-  note: 'note',
-  appsheading: 'appsHeading',
-  appslead: 'appsLead',
-  partnerslabel: 'partnersLabel',
-};
+// The sheet controls the app rows and the headline numbers, and nothing else.
+// Page wording is identical across courses and lives in data/site-text.json;
+// the cohort label and logos change per course and live in the course file.
+// Both are edited by the team, not by instructors.
+//
+// A `stat` row is handled separately — it takes a third column for the label.
+const SETTINGS = {};
 
 /** Minimal but correct CSV reader: handles quoted fields, escaped quotes ("")
  *  and newlines inside quotes. Google's export uses all three. */
@@ -85,6 +80,7 @@ function split(rows) {
 
   const settings = {};
   const stats = [];
+  const ignored = [];
 
   for (const row of rows.slice(0, headerAt)) {
     const key = (row[0] || '').trim().toLowerCase().replace(/[\s_-]/g, '');
@@ -99,11 +95,14 @@ function split(rows) {
     }
 
     if (SETTINGS[key]) settings[SETTINGS[key]] = value;
+    // Say so rather than ignoring in silence: someone typing `title` into the
+    // sheet needs to know the site is not going to read it.
+    else ignored.push(key);
   }
 
   if (stats.length) settings.stats = stats;
 
-  return { settings, table: rows.slice(headerAt) };
+  return { settings, stats, ignored, table: rows.slice(headerAt) };
 }
 
 /** Needs a real host, not just the right prefix: "https://" passes a prefix
@@ -306,7 +305,15 @@ async function readCourse(slug, source, problems, imageNotes) {
   const rows = parseCsv(text);
   if (!rows.length) throw new Error('sheet is empty');
 
-  const { settings, table } = split(rows);
+  const { settings, ignored, table } = split(rows);
+
+  if (ignored.length) {
+    problems.push(
+      `[${slug}] these settings rows are not read by the site and were ignored: ${ignored.join(', ')} ` +
+      `— page wording lives in data/site-text.json, the cohort label and logos in the course file`
+    );
+  }
+
 
   // Zero apps is legitimate: a course sheet is set up before the students
   // have built anything. Only a malformed sheet — one with no app table at

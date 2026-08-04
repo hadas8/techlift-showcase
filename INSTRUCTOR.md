@@ -66,12 +66,8 @@ app, or delete it.
 | `hidden` | Tick to keep the row off the site — see below |
 | `no-embed` | Tick if the app misbehaves when embedded |
 
-At the very top of the sheet there are `key, value` rows for the page itself —
-the headline, the class name or dates, the intro paragraph. Those are yours to
-edit too.
-
-Among them are the **headline numbers** shown across the top of the page.
-These take a third column, for the label:
+At the very top of the sheet are the **headline numbers** shown across the top
+of the page. These take a third column, for the label:
 
 ```
 stat,12,תלמידים
@@ -81,6 +77,10 @@ stat,auto,אפליקציות
 
 Put the real number of students in your cohort. Leave `auto` where it is —
 that one counts the apps for you, so it stays right as you add rows.
+
+Everything else on the page — the headline, the intro, the class name — is
+fixed and set by the Techlift team, so it reads the same across every course.
+Adding other rows to the sheet won't change it.
 
 ## 5. Use `hidden` while you work
 
