@@ -3,6 +3,12 @@
 Static showcase for apps built by students on the vibe-coding workshop.
 One page per course, each in its own language, deployed to GitHub Pages.
 
+**Running a course?** [TEAM.md](TEAM.md) is the step-by-step guide for setting
+up and publishing, written for a browser and no command line.
+[INSTRUCTOR.md](INSTRUCTOR.md) is what you hand to an instructor.
+
+The rest of this file is how the thing works underneath.
+
 ## Where the content comes from
 
 **One spreadsheet per course.** Sheets cannot show one person only one tab —
