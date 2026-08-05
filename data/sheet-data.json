@@ -1,4 +1,23 @@
 {
+  "example": {
+    "apps": [],
+    "settings": {
+      "stats": [
+        {
+          "value": "12",
+          "label": "תלמידים"
+        },
+        {
+          "value": "5",
+          "label": "ימי קורס"
+        },
+        {
+          "value": "auto",
+          "label": "אפליקציות"
+        }
+      ]
+    }
+  },
   "he": {
     "apps": [
       {
