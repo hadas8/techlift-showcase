@@ -135,7 +135,7 @@ function page(course, t, cards) {
     : '';
 
   const secHead = course.appsHeading
-    ? `<div class="sec-head"><span class="no">01</span><h2>${esc(course.appsHeading)}</h2></div>
+    ? `<div class="sec-head"><h2>${esc(course.appsHeading)}</h2></div>
   ${course.appsLead ? `<p class="lead">${esc(course.appsLead)}</p>` : ''}`
     : '';
 

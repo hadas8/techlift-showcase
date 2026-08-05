@@ -118,8 +118,6 @@ h1 {
 
 .sec-head { display: flex; align-items: baseline; gap: 13px; margin: 0 0 6px; }
 
-.sec-head .no { font-size: 25px; font-weight: 800; color: var(--accent); }
-
 .sec-head h2 { margin: 0; font-size: clamp(22px, 3.2vw, 30px); font-weight: 800; letter-spacing: -.015em; }
 
 .lead { margin: 0 0 26px; max-width: 70ch; color: var(--ink-soft); font-size: 16px; }
@@ -398,8 +396,6 @@ body.modal-open { overflow: hidden; }
 .theme-brand .stats b { color: var(--ink); }
 
 .theme-brand .sec-head { margin-top: 58px; }
-.theme-brand .sec-head .no { color: var(--periwinkle); font-weight: 900; }
-
 .theme-brand .tags li { color: #3b3577; background: var(--accent-soft); }
 
 .theme-brand .card:hover,
