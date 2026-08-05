@@ -6,6 +6,7 @@
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { readJson } from './read-json.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')));
 const COURSES = path.join(ROOT, 'data', 'courses');
@@ -68,7 +69,7 @@ async function main() {
   let partners = null;
 
   for (const f of (await readdir(COURSES)).filter((n) => n.endsWith('.json'))) {
-    const existing = JSON.parse(await readFile(path.join(COURSES, f), 'utf8'));
+    const existing = await readJson(path.join(COURSES, f));
 
     if (existing.slug === slug) {
       console.error(`Slug "${slug}" is already used by data/courses/${f} — pick another, or edit that file.`);
@@ -109,7 +110,7 @@ async function main() {
   await writeFile(file, JSON.stringify(course, null, 2) + '\n', 'utf8');
   console.log(`Wrote ${path.relative(ROOT, file)}`);
 
-  const sheets = existsSync(SHEETS) ? JSON.parse(await readFile(SHEETS, 'utf8')) : {};
+  const sheets = existsSync(SHEETS) ? await readJson(SHEETS) : {};
 
   if (opts.url && opts.url !== 'true') {
     if (!/^https?:\/\//i.test(opts.url)) {

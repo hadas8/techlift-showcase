@@ -3,6 +3,7 @@
 import { readdir, readFile, mkdir, writeFile, copyFile, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { readJson } from './scripts/read-json.mjs';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 const COURSES = path.join(ROOT, 'data', 'courses');
@@ -248,17 +249,17 @@ async function main() {
 
   // Synced from the course sheets, if any. Falls back to what is in the
   // course file, so the repo builds on its own.
-  const sheet = existsSync(SHEET_DATA) ? JSON.parse(await readFile(SHEET_DATA, 'utf8')) : {};
+  const sheet = existsSync(SHEET_DATA) ? await readJson(SHEET_DATA) : {};
 
   // Wording shared by every course in a language.
-  const siteText = existsSync(SITE_TEXT) ? JSON.parse(await readFile(SITE_TEXT, 'utf8')) : {};
+  const siteText = existsSync(SITE_TEXT) ? await readJson(SITE_TEXT) : {};
 
   const files = (await readdir(COURSES)).filter((f) => f.endsWith('.json'));
   const built = [];
   const seenSlugs = new Map();
 
   for (const file of files) {
-    const own = JSON.parse(await readFile(path.join(COURSES, file), 'utf8'));
+    const own = await readJson(path.join(COURSES, file));
     const t = STRINGS[own.lang];
     if (!t) throw new Error(`${file}: unknown language "${own.lang}"`);
 

@@ -87,18 +87,37 @@ Two small files. In GitHub, use **Add file → Create new file** and
 - `partners` are the logos at the foot of the page. See *Changing logos*.
 - Leave `lang` and `theme` as above for a Hebrew page.
 
-**File two** — open `data/sheets.json`, click the pencil, and add a line with
-your slug and the published url:
+**File two** — open `data/sheets.json` and click the pencil. **You are adding
+one line.**
+
+It currently looks like this:
 
 ```json
 {
+  "_comment": "One published CSV url per course. …",
+  "he": "https://docs.google.com/…&output=csv"
+}
+```
+
+After your edit:
+
+```json
+{
+  "_comment": "One published CSV url per course. …",
   "he": "https://docs.google.com/…&output=csv",
   "autumn-2026": "https://docs.google.com/…&output=csv"
 }
 ```
 
-Mind the comma at the end of the line above yours. If you get it wrong the
-sync will say so rather than breaking the site.
+Note the **comma added to the end of the line above yours**. Every line needs
+a comma except the last one.
+
+If you get that wrong it's fine — a leftover comma on the last line is
+tolerated, and anything genuinely broken is reported with the file and line
+number, while the site carries on serving the previous version.
+
+The slug here must match the `slug` in the course file exactly. If it doesn't,
+the sync says so rather than quietly publishing nothing.
 
 ### 4. Publish
 

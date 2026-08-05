@@ -7,6 +7,7 @@
 import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { readJson } from './read-json.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')));
 const CONFIG = path.join(ROOT, 'data', 'sheets.json');
@@ -344,8 +345,27 @@ async function main() {
     return;
   }
 
-  const config = JSON.parse(await readFile(CONFIG, 'utf8'));
+  const config = await readJson(CONFIG);
   const courses = Object.entries(config).filter(([slug]) => !slug.startsWith('_'));
+
+  // Registering a sheet and creating the course file are two separate edits,
+  // and doing only the first produces no page and no error. Say so.
+  const COURSES_DIR = path.join(ROOT, 'data', 'courses');
+  const known = new Set();
+  if (existsSync(COURSES_DIR)) {
+    for (const f of (await readdir(COURSES_DIR)).filter((n) => n.endsWith('.json'))) {
+      const c = await readJson(path.join(COURSES_DIR, f));
+      if (c.slug) known.add(c.slug);
+    }
+  }
+  for (const [slug] of courses) {
+    if (!known.has(slug)) {
+      console.warn(
+        `  ! "${slug}" is in data/sheets.json but no course file has that slug — ` +
+        `nothing will be published for it until data/courses/${slug}.json exists`
+      );
+    }
+  }
 
   if (!courses.length) {
     console.error(`No courses in ${path.relative(ROOT, CONFIG)}.`);
@@ -400,7 +420,7 @@ async function main() {
   }
   if (failures.length) {
     console.warn(`\n  ! ${failures.length} of ${courses.length} sheets failed; keeping the previous data for those.`);
-    const previousData = existsSync(OUT) ? JSON.parse(await readFile(OUT, 'utf8')) : {};
+    const previousData = existsSync(OUT) ? await readJson(OUT) : {};
     for (const f of failures) {
       const slug = f.split(':')[0];
       if (previousData[slug]) result[slug] = previousData[slug];
