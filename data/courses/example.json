@@ -1,1 +1,11 @@
-
+{
+  "slug": "autumn-2026",
+  "lang": "he",
+  "theme": "brand",
+  "cohort": "פלייטיקה, אוגוסט 2026",
+  "partners": [
+    { "file": "logo-8200-he.png", "name": "עמותת בוגרי 8200", "height": 74 },
+    { "file": "logo-hitechzone.png", "name": "הייטקזון" },
+    { "file": "logo-playtika.png", "name": "Playtika" }
+  ]
+}
