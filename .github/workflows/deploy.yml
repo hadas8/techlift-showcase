@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Callable by the sync workflow. A push made with the default GITHUB_TOKEN
+  # does not trigger workflows — GitHub blocks that to prevent loops — so the
+  # sync has to invoke this itself rather than relying on its own commit.
+  workflow_call:
 
 permissions:
   contents: read

@@ -141,11 +141,12 @@ Share with them:
 2. **Sync roster from Google Sheet** in the left sidebar
 3. **Run workflow** → **Run workflow**
 
-Wait ~20 seconds and it turns green. A second job starts on its own to publish
-the site; give it another ~20 seconds, then reload the page.
+Refresh the page after ~10 seconds — it doesn't update on its own. Your run is
+the one at the **top**; ignore older red ones below it. It goes green in about
+40 seconds, having both pulled the sheet and published the site.
 
 **"No roster change" is not a failure.** It means the sheet matches what's
-already published.
+already published, so there was nothing to publish.
 
 ### Reading the report
 

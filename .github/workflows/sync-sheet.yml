@@ -16,6 +16,8 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,6 +29,7 @@ jobs:
         run: npm run sync
 
       - name: Commit if the roster changed
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -39,8 +42,22 @@ jobs:
           git add data/sheet-data.json public/screenshots
           if git diff --cached --quiet -- data/sheet-data.json public/screenshots; then
             echo "No roster change."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "Update app roster from the sheet"
           git push
-          echo "Roster updated — the deploy workflow will publish it."
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "Roster updated — publishing."
+
+  # Invoked directly rather than left to the push above: a commit pushed with
+  # the default GITHUB_TOKEN does not start a workflow run, so the roster
+  # would otherwise land in the repo and never reach the site.
+  publish:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
