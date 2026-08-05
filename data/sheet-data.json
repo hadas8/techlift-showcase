@@ -2,21 +2,22 @@
   "example": {
     "apps": [
       {
-        "name": "שם האפליקציה — שורת דוגמה. אפשר לכתוב עליה או למחוק אותה.",
-        "url": "https://example.com/",
-        "description": "מה היא עושה במשפט אחד.",
-        "author": "שם התלמיד/ה",
-        "icon": "🚀",
+        "name": "cooking class",
+        "url": "https://aistudio.google.com/apps",
+        "description": "משחק לבניית ארוחה",
+        "author": "שחר האלופה",
+        "screenshot": "drive-1zs-DKNGH-t59WgsC1HHtUrNGfarfsqVj.jpg",
         "tags": [
-          "תגית",
-          "תגית"
+          "משחק",
+          "כיף",
+          "בישול"
         ]
       }
     ],
     "settings": {
       "stats": [
         {
-          "value": "16",
+          "value": "20",
           "label": "תלמידים"
         },
         {
