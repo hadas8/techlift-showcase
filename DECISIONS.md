@@ -3,7 +3,7 @@
 Everything still undecided, roughly in the order it needs deciding. Nothing
 here blocks the Hebrew site, which is live and working.
 
-Last updated: 02 August 2026.
+Last updated: 05 August 2026.
 
 ---
 
@@ -145,11 +145,10 @@ Instructors fill in a GitHub link that never appears on the site. Either add
 a small "source code" link to each card, or drop the column. Kept for now by
 choice.
 
-### 13. The Drive screenshot path is untested
+### 13. ~~The Drive screenshot path is untested~~ — works
 
-Everything else in the pipeline has been run end to end. Pasting a real Drive
-share link into the `screenshot` column has not — there was no shared Drive
-file to try it with. The pilot is the natural place to find out.
+Proven 5 August on the `example` course: a Drive share link in the
+`screenshot` column was downloaded, committed and is serving from the site.
 
 ### 14. ~~A stale GitHub variable~~ — done
 
