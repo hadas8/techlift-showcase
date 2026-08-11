@@ -11,7 +11,17 @@ Last updated: 02 August 2026.
 
 ### 1. Whose GitHub account do students use?
 
-Options: each student's own, the instructor's, or the organisation's.
+**Not an organisation account.** Tested 5 August: repos under the work org
+are created fine but AI Studio then refuses to publish. A brand-new unrelated
+account works. The cause is the org restricting third-party applications —
+normal security policy, not a misconfiguration — and only an org owner can
+approve the Google AI Studio app.
+
+(The AI Studio README vanishing from org repos is a red herring:
+`food_left_googleAIStudio_app` has no README at all and publishes fine.)
+
+So the remaining options: each student's own account, the instructor's, or a
+dedicated non-org account created for the programme.
 
 This decides what the instructor does on day one, so it can't wait. It also
 decides how much control you keep: **the published app url lives on the
@@ -22,6 +32,11 @@ re-publish it. If it's in the student's own GitHub, you can't.
 Related and time-bound: **get every app onto a GitHub account you control
 before the course ends**, while students are still reachable. Chasing them
 afterwards is much harder.
+
+Repos can be transferred to the organisation later, which keeps the "we own
+the code" goal without fighting the app policy. **Untested: whether
+transferring a repo breaks its published app url.** Worth trying on one
+throwaway app before doing it to a cohort.
 
 ### 2. Who runs the sync?
 
