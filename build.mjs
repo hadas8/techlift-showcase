@@ -328,6 +328,14 @@ async function main() {
 
   for (const file of files) {
     const own = await readJson(path.join(COURSES, file));
+
+    // Kept in the repo but off the site: the files stay for reuse, they just
+    // produce no page and their sheet is not fetched.
+    if (own.published === false) {
+      console.log(`  /${own.slug}/  not published`);
+      continue;
+    }
+
     const t = STRINGS[own.lang];
     if (!t) throw new Error(`${file}: unknown language "${own.lang}"`);
 

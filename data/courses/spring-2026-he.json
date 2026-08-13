@@ -1,6 +1,7 @@
 {
   "_comment": "Per-course. Only `cohort` and `partners` normally need changing for a new course — the rest is set once by `npm run new-course`. All shared wording lives in data/site-text.json.",
 
+  "published": false,
   "slug": "he",
   "lang": "he",
   "theme": "brand",

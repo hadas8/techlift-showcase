@@ -394,18 +394,32 @@ async function main() {
   }
 
   const config = await readJson(CONFIG);
-  const courses = Object.entries(config).filter(([slug]) => !slug.startsWith('_'));
 
-  // Registering a sheet and creating the course file are two separate edits,
-  // and doing only the first produces no page and no error. Say so.
   const COURSES_DIR = path.join(ROOT, 'data', 'courses');
   const known = new Set();
+  const unpublished = new Set();
+
   if (existsSync(COURSES_DIR)) {
     for (const f of (await readdir(COURSES_DIR)).filter((n) => n.endsWith('.json'))) {
       const c = await readJson(path.join(COURSES_DIR, f));
-      if (c.slug) known.add(c.slug);
+      if (!c.slug) continue;
+      known.add(c.slug);
+      if (c.published === false) unpublished.add(c.slug);
     }
   }
+
+  // A course marked `"published": false` keeps its files but is not fetched,
+  // so it costs nothing on every run.
+  const courses = Object.entries(config)
+    .filter(([slug]) => !slug.startsWith('_'))
+    .filter(([slug]) => {
+      if (!unpublished.has(slug)) return true;
+      console.log(`  skipping "${slug}" — not published`);
+      return false;
+    });
+
+  // Registering a sheet and creating the course file are two separate edits,
+  // and doing only the first produces no page and no error. Say so.
   for (const [slug] of courses) {
     if (!known.has(slug)) {
       console.warn(
