@@ -67,7 +67,6 @@ app, or delete it.
 | `tags` | One or two words each, separated by `\|` — e.g. `משחק \| חינוך` |
 | `icon` | An emoji, or a link to the app's own logo — see below |
 | `screenshot` | Optional — see below |
-| `crop` | Which part of the screenshot to show — see below |
 | `hidden` | Tick to keep the row off the site — see below |
 | `no-embed` | Tick if the app misbehaves when embedded |
 
@@ -148,17 +147,6 @@ The image must be shared with **anyone with the link**. If the whole folder is
 shared that way, everything you drop in it inherits the setting.
 
 Landscape shots work best, around 1440×900. Keep them under about 1.5MB.
-
-**Phone screenshots are tall**, and the card is wide, so only a horizontal
-band of one can be shown. By default that band comes from the middle, which
-is often the wrong part. The `crop` column picks it:
-
-- `top` — the top of the screen, usually the app's name and header
-- `bottom` — the bottom
-- a percentage like `25%` or `60%` — `0%` is the very top, `100%` the bottom
-
-Leave it blank for the middle. Easiest way to choose: look at the screenshot,
-decide roughly how far down the interesting part sits, and put that.
 
 ## 9. Ask for a sync
 

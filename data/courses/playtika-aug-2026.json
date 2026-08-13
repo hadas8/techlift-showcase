@@ -4,6 +4,13 @@
   "lang": "he",
   "theme": "brand",
   "cohort": "פלייטיקה, אוגוסט 2026",
+  "crops": {
+    "Logo": "60%",
+    "Hearo": "top",
+    "SaveWise": "top",
+    "GrandBus": "25%"
+  },
+
   "partners": [
     {
       "file": "logo-8200-he.png",

@@ -101,6 +101,28 @@ card alone looks like something failed to load.
 }
 ```
 
+### Cropping screenshots
+
+Phone screenshots are about 9:16 and the card is 16:10, so roughly two thirds
+of the height is cropped away. By default that band comes from the middle,
+which is rarely the interesting part.
+
+`crops` in the course file picks it per app, keyed by the app's name in the
+sheet:
+
+```jsonc
+"crops": {
+  "Logo":     "60%",   // 0% is the top of the image, 100% the bottom
+  "Hearo":    "top",
+  "SaveWise": "top",
+  "GrandBus": "25%"
+}
+```
+
+Deliberately not a sheet column — instructors share those sheets, and this is
+a presentation decision for whoever runs the site. A key that matches no app
+is reported at build time, so a renamed app doesn't silently lose its crop.
+
 Logo files live in `public/brand/`. Add a course's own partner or customer by
 appending to the list; the strip grows to fit. The supplied logos are white
 knockouts, which is why that strip is dark — a coloured logo would need it
@@ -127,7 +149,6 @@ column order doesn't matter, unknown columns are ignored.
 | `tags` | | Separate with `\|` or `,` |
 | `icon` | | An emoji, **or** a link to a logo image (Drive share link or any image url). Falls back to the first letter of the name. |
 | `screenshot` | | A Google Drive share link, any public image url, or the filename of an image already in `public/screenshots/`. See below. |
-| `crop` | | Which part of a tall screenshot to keep — `top`, `bottom`, or a percentage like `25%`. Blank uses the middle. |
 | `hidden` | | Keeps a row out of the site — use it to stage an app before it's ready |
 | `no-embed` | | Card opens the app in a new tab instead of embedding it |
 

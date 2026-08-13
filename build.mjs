@@ -394,6 +394,20 @@ async function main() {
       continue;
     }
 
+    // Crops are keyed by the app's name in the sheet. Renaming an app there
+    // would otherwise drop its crop without a word.
+    if (course.crops) {
+      const names = new Set(course.apps.map((a) => a.name));
+      for (const key of Object.keys(course.crops)) {
+        if (!names.has(key)) {
+          console.warn(`  ! /${course.slug}/  crop for "${key}" matches no app — check the name in the sheet`);
+        }
+      }
+      for (const app of course.apps) {
+        if (course.crops[app.name]) app.crop = course.crops[app.name];
+      }
+    }
+
     const cards = course.apps
       .map((app) => {
         const hasShot = Boolean(app.screenshot) && existsSync(path.join(SHOTS, app.screenshot));
