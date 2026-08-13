@@ -64,30 +64,57 @@
       {
         "name": "Logo",
         "url": "https://hadas8.github.io/logo-game/",
-        "repo": "https://github.com/hadas8/logo-game"
+        "description": "למידה חכמה באמצעות משחק לתלמידי יסודי עד חטיבה",
+        "author": "אדם אנטוקול, ליאם מגיד, עמוס ברקוביץ׳",
+        "repo": "https://github.com/hadas8/logo-game",
+        "tags": [
+          "למידה חכמה",
+          "תלמידים",
+          "משחק"
+        ]
       },
       {
         "name": "Hearo",
         "url": "https://hadas8.github.io/noshmim/",
-        "repo": "https://github.com/hadas8/noshmim"
+        "description": "צ׳אט חכם לתמיכה נפשית ומניעת מצבי מצוקה בקרב בני נוער",
+        "author": "מאיה קריאף, רוני בראון, לידר אוסלו",
+        "repo": "https://github.com/hadas8/noshmim",
+        "tags": [
+          "תמיכה נפשית",
+          "מקום בטוח",
+          "צ׳אט מקצועי"
+        ]
       },
       {
         "name": "SaveWise",
         "url": "https://hadas8.github.io/savewise/",
-        "repo": "https://github.com/hadas8/savewise"
+        "description": "השוואת מחירים בין מוצרים לצרכנות נבונה וחיסכון",
+        "author": "תום סנדלר, רומי קורצ׳ק, עומר קנטרוביץ׳",
+        "repo": "https://github.com/hadas8/savewise",
+        "tags": [
+          "צרכנות נבונה",
+          "יוקר המחיה",
+          "חיסכון"
+        ]
       },
       {
         "name": "GrandBus",
         "url": "https://hadas8.github.io/Voice-Transit-Assistance/",
+        "description": "הנגשה טכנולוגית של תחבורה ציבורית לגיל השלישי",
+        "author": "עופרי לגזיאל, עלמה פליישמן",
         "repo": "https://github.com/hadas8/Voice-Transit-Assistance",
+        "tags": [
+          "תחבורה ציבורית",
+          "פשוט למשתמש",
+          "הגיל השלישי"
+        ],
         "embeddable": false
       }
     ],
     "settings": {
-      "instructorName": "בדיקה",
+      "instructorName": "שחר יריב",
       "instructorRole": "מדריכת הקורס",
-      "instructorLinkedin": "https://www.linkedin.com/in/hadasetzion/",
-      "instructorEmail": "hadas4444@gmail.com",
+      "instructorEmail": "SHAHARY@8200.ORG.IL",
       "stats": [
         {
           "value": "11",
