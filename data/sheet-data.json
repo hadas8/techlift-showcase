@@ -67,6 +67,7 @@
         "description": "למידה חכמה באמצעות משחק לתלמידי יסודי עד חטיבה",
         "author": "אדם אנטוקול, ליאם מגיד, עמוס ברקוביץ׳",
         "repo": "https://github.com/hadas8/logo-game",
+        "screenshot": "drive-1yoUegk7sc50bdxsxc65UBVB5cWPIoP9b.jpg",
         "tags": [
           "למידה חכמה",
           "תלמידים",
@@ -79,6 +80,7 @@
         "description": "צ׳אט חכם לתמיכה נפשית ומניעת מצבי מצוקה בקרב בני נוער",
         "author": "מאיה קריאף, רוני בראון, לידר אוסלו",
         "repo": "https://github.com/hadas8/noshmim",
+        "screenshot": "drive-1TlPGHbto7sNEhwWTgwN_GMA4Vu4npedB.jpg",
         "tags": [
           "תמיכה נפשית",
           "מקום בטוח",
@@ -91,6 +93,7 @@
         "description": "השוואת מחירים בין מוצרים לצרכנות נבונה וחיסכון",
         "author": "תום סנדלר, רומי קורצ׳ק, עומר קנטרוביץ׳",
         "repo": "https://github.com/hadas8/savewise",
+        "screenshot": "drive-1PRWvtbc_S1RouBfBmRcukZycU3BCwPuQ.jpg",
         "tags": [
           "צרכנות נבונה",
           "יוקר המחיה",
@@ -103,6 +106,7 @@
         "description": "הנגשה טכנולוגית של תחבורה ציבורית לגיל השלישי",
         "author": "עופרי לגזיאל, עלמה פליישמן",
         "repo": "https://github.com/hadas8/Voice-Transit-Assistance",
+        "screenshot": "drive-1vvfpMvzZjiuNFGXu9DpUKImYUlf-siFL.jpg",
         "tags": [
           "תחבורה ציבורית",
           "פשוט למשתמש",
@@ -114,6 +118,7 @@
     "settings": {
       "instructorName": "שחר יריב",
       "instructorRole": "מדריכת הקורס",
+      "instructorLinkedin": "https://www.linkedin.com/in/shahar-y-a95068374",
       "instructorEmail": "SHAHARY@8200.ORG.IL",
       "stats": [
         {
