@@ -62,15 +62,20 @@
   "playtika-aug-2026": {
     "apps": [
       {
-        "name": "שם האפליקציה — שורת דוגמה. אפשר לכתוב עליה או למחוק אותה.",
-        "url": "https://example.com/",
-        "description": "מה היא עושה במשפט אחד.",
-        "author": "שם התלמיד/ה",
-        "icon": "🚀",
-        "tags": [
-          "תגית",
-          "תגית"
-        ]
+        "name": "Logo",
+        "url": "https://hadas8.github.io/logo-game/"
+      },
+      {
+        "name": "Hearo",
+        "url": "https://hadas8.github.io/noshmim/"
+      },
+      {
+        "name": "SaveWise",
+        "url": "https://hadas8.github.io/savewise/"
+      },
+      {
+        "name": "GrandBus",
+        "url": "https://hadas8.github.io/Voice-Transit-Assistance/"
       }
     ],
     "settings": {
