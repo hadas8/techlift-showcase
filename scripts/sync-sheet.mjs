@@ -365,10 +365,19 @@ async function readCourse(slug, source, problems, imageNotes) {
   // downloaded into public/screenshots and replaced with the local filename.
   // A bare filename is left alone, for images added to the repo by hand.
   for (const app of apps) {
-    if (!app.screenshot || !/^https?:\/\//i.test(app.screenshot)) continue;
-    const local = await fetchImage(app.screenshot, app.name, imageNotes);
-    if (local) app.screenshot = local;
-    else delete app.screenshot;
+    if (app.screenshot && /^https?:\/\//i.test(app.screenshot)) {
+      const local = await fetchImage(app.screenshot, app.name, imageNotes);
+      if (local) app.screenshot = local;
+      else delete app.screenshot;
+    }
+
+    // The icon column takes an emoji or an image. Students often make a real
+    // logo for their app, which belongs in the tile far more than a letter.
+    if (app.icon && /^https?:\/\//i.test(app.icon)) {
+      const local = await fetchImage(app.icon, `${app.name} (logo)`, imageNotes);
+      if (local) app.iconImage = local;
+      delete app.icon;
+    }
   }
 
   return { settings, apps };

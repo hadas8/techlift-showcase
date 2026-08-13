@@ -125,7 +125,7 @@ column order doesn't matter, unknown columns are ignored.
 | `author` | | Shown under the app name |
 | `repo` | | |
 | `tags` | | Separate with `\|` or `,` |
-| `icon` | | One emoji. Falls back to the first letter of the name. |
+| `icon` | | An emoji, **or** a link to a logo image (Drive share link or any image url). Falls back to the first letter of the name. |
 | `screenshot` | | A Google Drive share link, any public image url, or the filename of an image already in `public/screenshots/`. See below. |
 | `hidden` | | Keeps a row out of the site — use it to stage an app before it's ready |
 | `no-embed` | | Card opens the app in a new tab instead of embedding it |

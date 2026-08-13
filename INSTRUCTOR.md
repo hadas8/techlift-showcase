@@ -65,7 +65,7 @@ app, or delete it.
 | `url` | The published url from step 2 |
 | `repo` | The GitHub link. Not shown on the site yet — fill it in for the record. |
 | `tags` | One or two words each, separated by `\|` — e.g. `משחק \| חינוך` |
-| `icon` | One emoji that suits the app |
+| `icon` | An emoji, or a link to the app's own logo — see below |
 | `screenshot` | Optional — see below |
 | `hidden` | Tick to keep the row off the site — see below |
 | `no-embed` | Tick if the app misbehaves when embedded |
@@ -124,7 +124,18 @@ checkbox — select the cells and use **Insert → Checkbox**.
 **Don't use `x`.** People mean opposite things by it, so it's ignored — a row
 marked `x` will publish.
 
-## 7. Screenshots (optional)
+## 7. App logos (optional)
+
+If a student made a logo for their app, put it in the `icon` column instead of
+an emoji: drop the image in the Drive folder, **Share → Copy link**, and paste
+that link in. Same sharing rule as screenshots — **anyone with the link**.
+
+The logo appears in the small square next to the app's name. A square or
+roughly square image works best; wide ones get shrunk to fit.
+
+Without a logo or an emoji, the square shows the first letter of the app name.
+
+## 8. Screenshots (optional)
 
 Cards look fine with just an emoji, so this is a nice-to-have.
 
@@ -137,7 +148,7 @@ shared that way, everything you drop in it inherits the setting.
 
 Landscape shots work best, around 1440×900. Keep them under about 1.5MB.
 
-## 8. Ask for a sync
+## 9. Ask for a sync
 
 When your sheet is ready, tell whoever manages the site. They press one button
 and the page updates about a minute later.
@@ -145,7 +156,7 @@ and the page updates about a minute later.
 Nothing you type appears on the site until that happens — so you can edit
 freely and ask for a sync when you're happy.
 
-## 9. If something you added doesn't show up
+## 10. If something you added doesn't show up
 
 The sync checks every row and skips any it can't use, rather than publishing a
 half-broken card. It records exactly which rows it skipped and why — but that
