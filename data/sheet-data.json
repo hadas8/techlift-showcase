@@ -63,19 +63,24 @@
     "apps": [
       {
         "name": "Logo",
-        "url": "https://hadas8.github.io/logo-game/"
+        "url": "https://hadas8.github.io/logo-game/",
+        "repo": "https://github.com/hadas8/logo-game"
       },
       {
         "name": "Hearo",
-        "url": "https://hadas8.github.io/noshmim/"
+        "url": "https://hadas8.github.io/noshmim/",
+        "repo": "https://github.com/hadas8/noshmim"
       },
       {
         "name": "SaveWise",
-        "url": "https://hadas8.github.io/savewise/"
+        "url": "https://hadas8.github.io/savewise/",
+        "repo": "https://github.com/hadas8/savewise"
       },
       {
         "name": "GrandBus",
-        "url": "https://hadas8.github.io/Voice-Transit-Assistance/"
+        "url": "https://hadas8.github.io/Voice-Transit-Assistance/",
+        "repo": "https://github.com/hadas8/Voice-Transit-Assistance",
+        "embeddable": false
       }
     ],
     "settings": {
