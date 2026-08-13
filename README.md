@@ -127,6 +127,7 @@ column order doesn't matter, unknown columns are ignored.
 | `tags` | | Separate with `\|` or `,` |
 | `icon` | | An emoji, **or** a link to a logo image (Drive share link or any image url). Falls back to the first letter of the name. |
 | `screenshot` | | A Google Drive share link, any public image url, or the filename of an image already in `public/screenshots/`. See below. |
+| `crop` | | Which part of a tall screenshot to keep — `top`, `bottom`, or a percentage like `25%`. Blank uses the middle. |
 | `hidden` | | Keeps a row out of the site — use it to stage an app before it's ready |
 | `no-embed` | | Card opens the app in a new tab instead of embedding it |
 

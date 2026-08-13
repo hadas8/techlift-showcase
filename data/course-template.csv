@@ -9,5 +9,5 @@ instructorFacebook,,אופציונלי — קישור מלא לפייסבוק
 instructorInstagram,,אופציונלי — קישור מלא לאינסטגרם
 instructorEmail,,אופציונלי — כתובת מייל
 ,
-name,description,author,url,repo,tags,icon,screenshot,hidden,no-embed
-שם האפליקציה — שורת דוגמה. אפשר לכתוב עליה או למחוק אותה.,מה היא עושה במשפט אחד.,שם התלמיד/ה,https://example.com/,,תגית | תגית,🚀,,yes,
+name,description,author,url,repo,tags,icon,screenshot,crop,hidden,no-embed
+שם האפליקציה — שורת דוגמה. אפשר לכתוב עליה או למחוק אותה.,מה היא עושה במשפט אחד.,שם התלמיד/ה,https://example.com/,,תגית | תגית,🚀,,,yes,

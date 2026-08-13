@@ -85,9 +85,28 @@ function tileStyle(name, theme) {
   return `--tile:linear-gradient(140deg,hsl(${h} 46% 92%),hsl(${(h + 30) % 360} 42% 85%))`;
 }
 
+/** Turns a `crop` cell into a CSS object-position value. Accepts top / middle
+ *  / bottom or a percentage — 0% is the top of the image, 100% the bottom.
+ *  Anything else is ignored rather than injected into a style attribute. */
+function cropPosition(value) {
+  const v = String(value || '').trim().toLowerCase();
+  if (!v) return '';
+  if (['top', 'start', 'עליון'].includes(v)) return '0%';
+  if (['middle', 'center', 'centre', 'אמצע'].includes(v)) return '';
+  if (['bottom', 'end', 'תחתון'].includes(v)) return '100%';
+  const pct = /^(\d{1,3})\s*%?$/.exec(v);
+  if (pct && Number(pct[1]) <= 100) return `${Number(pct[1])}%`;
+  return '';
+}
+
 function card(app, t, hasShot, theme) {
+  // Which part of a tall screenshot survives the crop. Without this a phone
+  // screenshot shows a meaningless band from its middle; the interesting part
+  // is in a different place in every app.
+  const crop = cropPosition(app.crop);
+
   const media = hasShot
-    ? `<img class="shot" src="../screenshots/${esc(app.screenshot)}" alt="" loading="lazy" width="480" height="300">`
+    ? `<img class="shot" src="../screenshots/${esc(app.screenshot)}" alt=""${crop ? ` style="object-position:center ${crop}"` : ''} loading="lazy" width="480" height="300">`
     : '';
 
   const tags = (app.tags || []).map((tag) => `<li>${esc(tag)}</li>`).join('');
@@ -258,7 +277,7 @@ ${stats}
 
 <main class="wrap">
   ${secHead}
-  <ul class="grid${course.screenshots === 'phone' ? ' shots-phone' : ''}">
+  <ul class="grid">
 ${cards}
   </ul>
 </main>

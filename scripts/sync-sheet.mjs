@@ -182,6 +182,8 @@ function toApps(rows, defaultCourse) {
     if (repo) app.repo = repo;
     if (icon) app.icon = icon;
     if (screenshot) app.screenshot = screenshot;
+    const crop = at(row, 'crop');
+    if (crop) app.crop = crop;
     if (tags.length) app.tags = tags;
     if (truthy(at(row, 'no-embed'))) app.embeddable = false;
 
