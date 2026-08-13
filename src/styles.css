@@ -159,6 +159,17 @@ h1 {
   border-bottom: 1px solid var(--line);
 }
 
+/* Phone screenshots are about 9:16. Cropping one into the wide media box
+   throws away roughly 70% of its height and leaves a meaningless middle
+   band, so show the whole screen on a tinted panel instead — it reads as
+   "this is the app on a phone" rather than a bad crop. */
+.shots-phone .shot {
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  padding: 16px 12px;
+  background: var(--halo);
+}
+
 .card-body { padding: 18px 20px 16px; display: flex; flex-direction: column; flex: 1; }
 
 .card-head { display: flex; align-items: center; gap: 13px; margin-bottom: 13px; }

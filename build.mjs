@@ -258,7 +258,7 @@ ${stats}
 
 <main class="wrap">
   ${secHead}
-  <ul class="grid">
+  <ul class="grid${course.screenshots === 'phone' ? ' shots-phone' : ''}">
 ${cards}
   </ul>
 </main>
