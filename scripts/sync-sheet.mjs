@@ -20,7 +20,18 @@ const SHOTS_DIR = path.join(ROOT, 'public', 'screenshots');
 // Both are edited by the team, not by instructors.
 //
 // A `stat` row is handled separately — it takes a third column for the label.
-const SETTINGS = {};
+//
+// The instructor block is the exception to "the sheet only supplies apps":
+// it's about the person running that specific course, so it belongs with
+// them. Every field is optional — the block only appears if there's a name.
+const SETTINGS = {
+  instructorname: 'instructorName',
+  instructorrole: 'instructorRole',
+  instructorlinkedin: 'instructorLinkedin',
+  instructorfacebook: 'instructorFacebook',
+  instructorinstagram: 'instructorInstagram',
+  instructoremail: 'instructorEmail',
+};
 
 /** Minimal but correct CSV reader: handles quoted fields, escaped quotes ("")
  *  and newlines inside quotes. Google's export uses all three. */
@@ -307,6 +318,34 @@ async function readCourse(slug, source, problems, imageNotes) {
   if (!rows.length) throw new Error('sheet is empty');
 
   const { settings, ignored, table } = split(rows);
+
+  // A broken profile link on a donor-facing page is worse than no link, so
+  // anything malformed is dropped and reported rather than rendered.
+  for (const [field, label] of [
+    ['instructorLinkedin', 'LinkedIn'],
+    ['instructorFacebook', 'Facebook'],
+    ['instructorInstagram', 'Instagram'],
+  ]) {
+    if (settings[field] && !isRealUrl(settings[field])) {
+      problems.push(`[${slug}] instructor ${label} link "${settings[field]}" is not a complete web address — dropped`);
+      delete settings[field];
+    }
+  }
+
+  if (settings.instructorEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(settings.instructorEmail)) {
+    problems.push(`[${slug}] instructor email "${settings.instructorEmail}" does not look like an email address — dropped`);
+    delete settings.instructorEmail;
+  }
+
+  if (!settings.instructorName) {
+    for (const k of ['instructorRole', 'instructorLinkedin', 'instructorFacebook', 'instructorInstagram', 'instructorEmail']) {
+      if (settings[k]) {
+        problems.push(`[${slug}] instructor details were filled in but instructorName is empty, so the block is not shown`);
+        break;
+      }
+    }
+  }
+
 
   if (ignored.length) {
     problems.push(

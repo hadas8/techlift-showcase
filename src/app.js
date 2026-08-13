@@ -55,3 +55,14 @@
     if (e.key === 'Escape' && !modal.hidden) close();
   });
 })();
+
+// Email addresses are stored split across two attributes and only joined
+// here, so the served HTML contains no address for scrapers to pick up.
+(function () {
+  document.querySelectorAll('[data-mail-user]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      window.location.href =
+        'mailto:' + btn.getAttribute('data-mail-user') + '@' + btn.getAttribute('data-mail-domain');
+    });
+  });
+})();

@@ -86,7 +86,30 @@ Everything else on the page — the headline, the intro, the class name — is
 fixed and set by the Techlift team, so it reads the same across every course.
 Adding other rows to the sheet won't change it.
 
-## 5. Use `hidden` while you work
+## 5. Your own details (optional)
+
+Near the top of the sheet there are rows for you:
+
+```
+instructorName,שם מלא
+instructorRole,מנחה הקורס
+instructorLinkedin,https://www.linkedin.com/in/...
+instructorFacebook,
+instructorInstagram,
+instructorEmail,
+```
+
+All optional. Fill in what you want shown and leave the rest blank — an icon
+only appears for a link you've actually filled in. Leave `instructorName`
+empty and none of it appears at all.
+
+Links need to be complete addresses starting with `https://`. Anything that
+isn't is left off rather than published as a broken link.
+
+Your email is shown as an icon that opens a mail window, not written out on
+the page, so it isn't sitting there for spam bots to collect.
+
+## 6. Use `hidden` while you work
 
 Tick `hidden` on any row that isn't ready — a student still fixing something,
 or an app you haven't checked yet. The row stays in your sheet with everything
@@ -101,7 +124,7 @@ checkbox — select the cells and use **Insert → Checkbox**.
 **Don't use `x`.** People mean opposite things by it, so it's ignored — a row
 marked `x` will publish.
 
-## 6. Screenshots (optional)
+## 7. Screenshots (optional)
 
 Cards look fine with just an emoji, so this is a nice-to-have.
 
@@ -114,7 +137,7 @@ shared that way, everything you drop in it inherits the setting.
 
 Landscape shots work best, around 1440×900. Keep them under about 1.5MB.
 
-## 7. Ask for a sync
+## 8. Ask for a sync
 
 When your sheet is ready, tell whoever manages the site. They press one button
 and the page updates about a minute later.
@@ -122,7 +145,7 @@ and the page updates about a minute later.
 Nothing you type appears on the site until that happens — so you can edit
 freely and ask for a sync when you're happy.
 
-## 8. If something you added doesn't show up
+## 9. If something you added doesn't show up
 
 The sync checks every row and skips any it can't use, rather than publishing a
 half-broken card. It records exactly which rows it skipped and why — but that

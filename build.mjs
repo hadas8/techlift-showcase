@@ -113,6 +113,60 @@ function card(app, t, hasShot, theme) {
     </li>`;
 }
 
+const ICONS = {
+  linkedin: '<path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.2 21h3.5V8.9H3.2V21zM9.3 8.9V21h3.5v-6.3c0-1.7.9-2.6 2.1-2.6 1.2 0 1.9.8 1.9 2.6V21h3.5v-6.9c0-3.4-1.8-5-4.2-5-1.9 0-2.9 1.1-3.4 1.9V8.9H9.3z"/>',
+  facebook: '<path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3 0-1.3-.13-2.46-.13-2.44 0-4.11 1.49-4.11 4.22V9.9H7.4V13h2.73v8h3.37z"/>',
+  instagram: '<path fill-rule="evenodd" d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8zm4 3.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm0 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM17 6.2a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>',
+  email: '<path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11zm2.7-.5 6.3 4.4L18.3 6H5.7z"/>',
+};
+
+const icon = (name) =>
+  `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">${ICONS[name]}</svg>`;
+
+/** The address is split across two attributes and joined by script on click,
+ *  so it never appears in the served HTML for address scrapers to harvest.
+ *  Not secrecy — just not leaving it lying in the source. */
+function mailButton(address, label, className, ariaLabel) {
+  const at = String(address || '').indexOf('@');
+  if (at < 1) return '';
+  return `<button type="button" class="${className}"${ariaLabel ? ` aria-label="${esc(ariaLabel)}"` : ''}` +
+    ` data-mail-user="${esc(address.slice(0, at))}" data-mail-domain="${esc(address.slice(at + 1))}">${label}</button>`;
+}
+
+function instructorBlock(course, t) {
+  if (!course.instructorName) return '';
+
+  const links = [
+    ['instructorLinkedin', 'linkedin', 'LinkedIn'],
+    ['instructorFacebook', 'facebook', 'Facebook'],
+    ['instructorInstagram', 'instagram', 'Instagram'],
+  ]
+    .filter(([field]) => course[field])
+    .map(([field, name, label]) =>
+      `<li><a href="${esc(course[field])}" target="_blank" rel="noopener" aria-label="${esc(course.instructorName)} — ${label}">${icon(name)}</a></li>`
+    );
+
+  if (course.instructorEmail) {
+    links.push(`<li>${mailButton(course.instructorEmail, icon('email'), 'social-btn', `${course.instructorName} — email`)}</li>`);
+  }
+
+  return `<div class="instructor">
+      ${course.instructorLabel ? `<p class="instructor-label">${esc(course.instructorLabel)}</p>` : ''}
+      <p class="instructor-name">${esc(course.instructorName)}</p>
+      ${course.instructorRole ? `<p class="instructor-role">${esc(course.instructorRole)}</p>` : ''}
+      ${links.length ? `<ul class="socials">${links.join('')}</ul>` : ''}
+    </div>`;
+}
+
+function contactBlock(course) {
+  const button = mailButton(course.contactEmail, esc(course.contactButton || 'Contact'), 'btn btn-ghost');
+  if (!button) return '';
+  return `<div class="contact">
+      ${course.contactText ? `<p>${esc(course.contactText)}</p>` : ''}
+      ${button}
+    </div>`;
+}
+
 function page(course, t, cards) {
   // A stat whose value is "auto" counts the apps, so it can't go stale as
   // rows are added to the sheet.
@@ -199,7 +253,9 @@ ${cards}
 
 <footer class="foot">
   <div class="wrap">
-    ${course.note ? `<p>${esc(course.note)}</p>` : ''}
+    ${instructorBlock(course, t)}
+    ${contactBlock(course)}
+    ${course.note ? `<p class="small-print">${esc(course.note)}</p>` : ''}
   </div>
 </footer>
 

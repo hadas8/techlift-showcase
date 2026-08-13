@@ -7,7 +7,11 @@
     "appsHeading": "הפרויקטים",
     "appsLead": "כל פרויקט נבנה מהרעיון ועד למוצר עובד שאפשר להשתמש בו כאן ועכשיו.",
     "note": "האפליקציות הן פרויקטים לימודיים. הנתונים בהן הם נתוני הדגמה ואינם מייצגים מידע אמיתי.",
-    "partnersLabel": "בשיתוף"
+    "partnersLabel": "בשיתוף",
+    "instructorLabel": "בהנחיית",
+    "contactText": "לפרטים נוספים על תוכניות היזמות שלנו",
+    "contactButton": "צרו קשר",
+    "contactEmail": "ayalaefrat@8200.org.il"
   },
 
   "en": {
@@ -16,6 +20,10 @@
     "appsHeading": "The projects",
     "appsLead": "Each project went from an idea to a working product you can use right now.",
     "note": "These are student learning projects. The data inside them is sample data and does not represent real information.",
-    "partnersLabel": "In partnership with"
+    "partnersLabel": "In partnership with",
+    "instructorLabel": "Led by",
+    "contactText": "For more about our entrepreneurship programmes",
+    "contactButton": "Get in touch",
+    "contactEmail": "ayalaefrat@8200.org.il"
   }
 }

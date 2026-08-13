@@ -233,6 +233,62 @@ h1 {
 
 .foot p { margin: 0 0 8px; max-width: 70ch; }
 
+.small-print { font-size: 13.5px; opacity: .85; }
+
+/* ---------- instructor ---------- */
+
+.instructor { margin: 0 0 30px; }
+
+.instructor-label {
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.instructor-name { margin: 0; font-size: 19px; font-weight: 800; color: var(--ink); }
+.instructor-role { margin: 2px 0 0; font-size: 14.5px; color: var(--ink-soft); }
+
+.socials { display: flex; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+
+.socials a,
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: pointer;
+  padding: 0;
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.socials a:hover,
+.social-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+.socials a:focus-visible,
+.social-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- contact ---------- */
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 18px 0 22px;
+  border-top: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+
+.contact p { margin: 0; font-size: 15.5px; color: var(--ink); font-weight: 600; }
+
 .partners { background: var(--band); color: var(--band-ink); padding: 44px 0; }
 
 .partners-inner {
@@ -406,6 +462,13 @@ body.modal-open { overflow: hidden; }
 
 .theme-brand .partners { background: var(--band); }
 .theme-brand .modal { background: rgba(20, 17, 58, .6); }
+
+.theme-brand .socials a:hover,
+.theme-brand .social-btn:hover {
+  color: var(--ink);
+  border-color: var(--periwinkle);
+  background: var(--accent-soft);
+}
 
 .theme-brand .btn:focus-visible,
 .theme-brand .card a:focus-visible { outline-color: var(--periwinkle); }

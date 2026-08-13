@@ -1,6 +1,13 @@
-stat,12,תלמידים
+stat,,תלמידים
 stat,5,ימי קורס
 stat,auto,אפליקציות
+,
+instructorName,,אופציונלי — שם המדריך/ה. בלי שם כל השורות שמתחת לא יופיעו
+instructorRole,,אופציונלי — תפקיד או תיאור קצר
+instructorLinkedin,,אופציונלי — קישור מלא לפרופיל לינקדאין
+instructorFacebook,,אופציונלי — קישור מלא לפייסבוק
+instructorInstagram,,אופציונלי — קישור מלא לאינסטגרם
+instructorEmail,,אופציונלי — כתובת מייל
 ,
 name,description,author,url,repo,tags,icon,screenshot,hidden,no-embed
 שם האפליקציה — שורת דוגמה. אפשר לכתוב עליה או למחוק אותה.,מה היא עושה במשפט אחד.,שם התלמיד/ה,https://example.com/,,תגית | תגית,🚀,,yes,
