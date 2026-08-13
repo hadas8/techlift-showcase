@@ -93,10 +93,17 @@ function card(app, t, hasShot, theme) {
   const tags = (app.tags || []).map((tag) => `<li>${esc(tag)}</li>`).join('');
   const initial = [...String(app.name).trim()][0] || '?';
 
-  // A real logo sits on a plain surface; the generated hue would fight it.
+  // The lettered tile is a stand-in for a missing image. Once a card has a
+  // screenshot it has an identity already, so the stand-in is just clutter —
+  // it only appears when there is nothing else to look at. A chosen emoji or
+  // logo is not filler and always shows.
   const tile = app.iconImage
     ? `<span class="tile tile-img" aria-hidden="true"><img src="../screenshots/${esc(app.iconImage)}" alt="" loading="lazy"></span>`
-    : `<span class="tile" style="${esc(tileStyle(app.name, theme))}" aria-hidden="true">${esc(app.icon || initial)}</span>`;
+    : app.icon
+      ? `<span class="tile" style="${esc(tileStyle(app.name, theme))}" aria-hidden="true">${esc(app.icon)}</span>`
+      : hasShot
+        ? ''
+        : `<span class="tile" style="${esc(tileStyle(app.name, theme))}" aria-hidden="true">${esc(initial)}</span>`;
 
   return `<li class="card" data-url="${esc(app.url)}" data-name="${esc(app.name)}" data-embed="${app.embeddable === false ? 'false' : 'true'}">
       ${media}
