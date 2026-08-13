@@ -1,0 +1,22 @@
+{
+  "_comment": "Per-course. Only `cohort` and `partners` normally need changing for a new course. All shared wording lives in data/site-text.json.",
+  "slug": "playtika-aug-2026",
+  "lang": "he",
+  "theme": "brand",
+  "cohort": "פלייטיקה, אוגוסט 2026",
+  "partners": [
+    {
+      "file": "logo-8200-he.png",
+      "name": "עמותת בוגרי 8200",
+      "height": 74
+    },
+    {
+      "file": "logo-hitechzone.png",
+      "name": "הייטקזון"
+    },
+    {
+      "file": "logo-playtika.png",
+      "name": "Playtika"
+    }
+  ]
+}

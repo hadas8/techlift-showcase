@@ -1,5 +1,6 @@
 {
   "_comment": "One published CSV url per course. The key is the course slug, matching the slug in data/courses/*.json. Keys starting with _ are ignored. Publishing a sheet makes it world-readable, so these urls are not secrets.",
   "he": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ105pqQyOaSSbmoKe8zzSUp670Xq_DyxcWwJ5gzOCsNmOpN6vi3FkGJN4YhwKGO5TD21n-LRvILmzA/pub?gid=487377628&single=true&output=csv",
-  "example": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnQqD7H5nKW3p-5Mat3Jd1_DHcsDH7vWBnpVEpDtieAmi3BlUBqSt3LXz48gKT2siFduOhMjhqeSKm/pub?output=csv"
+  "example": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnQqD7H5nKW3p-5Mat3Jd1_DHcsDH7vWBnpVEpDtieAmi3BlUBqSt3LXz48gKT2siFduOhMjhqeSKm/pub?output=csv",
+  "playtika-aug-2026": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQd94_thbtKiTSp9YDtnnSL9AvYxYnovXDA4pOhRbRy-HlVx64aKJQoA6x96mZiqB4gFb-jtSgIDNv/pub?output=csv"
 }
